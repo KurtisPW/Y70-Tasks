@@ -10,7 +10,6 @@
       color-scheme: dark;
       --bg: #090b10;
       --panel: rgba(19, 23, 32, 0.92);
-      --panel-strong: #151a24;
       --text: #f7f8fb;
       --muted: #959dac;
       --line: rgba(255, 255, 255, 0.10);
@@ -50,124 +49,6 @@
       touch-action: manipulation;
     }
 
-    .auth-screen {
-      width: min(100%, 760px);
-      min-height: 100dvh;
-      margin: 0 auto;
-      padding: clamp(28px, 5vh, 72px) clamp(20px, 5vw, 48px);
-      display: grid;
-      place-items: center;
-    }
-
-    .auth-card {
-      width: 100%;
-      padding: clamp(28px, 6vw, 48px);
-      border: 1px solid var(--line);
-      border-radius: 34px;
-      background: rgba(15, 18, 25, 0.94);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-    }
-
-    .auth-mark {
-      display: grid;
-      place-items: center;
-      width: 86px;
-      height: 86px;
-      margin-bottom: 26px;
-      border-radius: 28px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 44px;
-    }
-
-    .auth-eyebrow,
-    .eyebrow {
-      margin: 0 0 8px;
-      color: var(--accent);
-      font-size: clamp(13px, 2.4vw, 17px);
-      font-weight: 800;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .auth-title {
-      margin: 0;
-      font-size: clamp(42px, 10vw, 74px);
-      line-height: 0.98;
-      letter-spacing: -0.055em;
-    }
-
-    .auth-copy {
-      margin: 18px 0 30px;
-      color: var(--muted);
-      font-size: clamp(17px, 3.2vw, 23px);
-      line-height: 1.45;
-    }
-
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .auth-field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .auth-field label {
-      color: var(--muted);
-      font-size: clamp(13px, 2.4vw, 17px);
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .auth-field input {
-      width: 100%;
-      height: clamp(72px, 12vw, 92px);
-      padding: 0 22px;
-      border: 1px solid var(--line);
-      outline: 0;
-      border-radius: 20px;
-      background: #0a0d12;
-      color: var(--text);
-      font-size: clamp(21px, 4vw, 30px);
-      cursor: pointer;
-      caret-color: transparent;
-    }
-
-    .auth-field input:active,
-    .auth-field input:focus {
-      border-color: rgba(155, 240, 11, 0.5);
-    }
-
-    .auth-button {
-      min-height: clamp(72px, 12vw, 92px);
-      margin-top: 8px;
-      border-radius: 20px;
-      background: var(--accent);
-      color: #11150a;
-      font-size: clamp(21px, 4vw, 30px);
-      font-weight: 850;
-    }
-
-    .auth-button:disabled { opacity: 0.55; cursor: default; }
-    .auth-button:active:not(:disabled) { transform: scale(0.985); }
-
-    .auth-message {
-      min-height: 1.5em;
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: clamp(14px, 2.6vw, 19px);
-      line-height: 1.45;
-    }
-
-    .auth-message.error { color: var(--danger); }
-
     .app {
       width: min(100%, 760px);
       min-height: 100dvh;
@@ -183,6 +64,15 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 20px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: clamp(13px, 2.4vw, 17px);
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
     }
 
     h1 {
@@ -272,130 +162,6 @@
 
     .add-button:active { transform: scale(0.96); }
 
-    body.keyboard-open { overflow: hidden; }
-
-    .keyboard-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 16px;
-      background: rgba(2, 4, 8, 0.82);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-
-    .keyboard-panel {
-      width: min(100%, 760px);
-      max-height: calc(100dvh - 32px);
-      overflow-y: auto;
-      padding: clamp(20px, 4vw, 32px);
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      background: rgba(15, 18, 25, 0.98);
-      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.62);
-    }
-
-    .keyboard-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-
-    .keyboard-title {
-      margin: 0;
-      font-size: clamp(28px, 5vw, 42px);
-      letter-spacing: -0.035em;
-    }
-
-    .keyboard-close {
-      display: grid;
-      place-items: center;
-      width: clamp(54px, 9vw, 68px);
-      height: clamp(54px, 9vw, 68px);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--muted);
-      font-size: clamp(28px, 5vw, 38px);
-    }
-
-    .draft-display {
-      min-height: clamp(92px, 15vw, 132px);
-      margin-bottom: 18px;
-      padding: 20px 22px;
-      border: 1px solid rgba(155, 240, 11, 0.28);
-      border-radius: 22px;
-      background: #0a0d12;
-      color: var(--text);
-      font-size: clamp(25px, 4.5vw, 34px);
-      font-weight: 650;
-      line-height: 1.3;
-      overflow-wrap: anywhere;
-      box-shadow: inset 0 0 0 1px rgba(155, 240, 11, 0.04);
-    }
-
-    .draft-display.empty { color: #6e7684; }
-
-    .draft-caret {
-      display: inline-block;
-      width: 3px;
-      height: 1em;
-      margin-left: 3px;
-      vertical-align: -0.12em;
-      border-radius: 2px;
-      background: var(--accent);
-      animation: blink 900ms steps(1) infinite;
-    }
-
-    @keyframes blink { 50% { opacity: 0; } }
-
-    .keyboard {
-      display: flex;
-      flex-direction: column;
-      gap: clamp(7px, 1.4vw, 11px);
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    .keyboard-row {
-      display: flex;
-      justify-content: center;
-      gap: clamp(5px, 1.1vw, 9px);
-    }
-
-    .key {
-      display: grid;
-      place-items: center;
-      flex: 1 1 0;
-      min-width: 0;
-      height: clamp(56px, 9.5vw, 76px);
-      padding: 0 4px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: clamp(10px, 2vw, 16px);
-      background: #252b36;
-      color: var(--text);
-      font-size: clamp(18px, 3.5vw, 27px);
-      font-weight: 750;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    }
-
-    .key:active { transform: scale(0.94); background: #343c49; }
-    .key-wide { flex: 1.55 1 0; }
-    .key-space { flex: 4.2 1 0; color: var(--muted); font-size: clamp(15px, 2.7vw, 20px); }
-    .key-action { flex: 2.2 1 0; background: var(--accent); color: #11150a; }
-    .key-shift.active { background: var(--accent-soft); border-color: rgba(155, 240, 11, 0.45); color: var(--accent); }
-
-    .keyboard-hint {
-      margin: 16px 0 0;
-      color: #687180;
-      font-size: clamp(12px, 2.2vw, 16px);
-      text-align: center;
-    }
-
     .toolbar {
       display: flex;
       align-items: center;
@@ -435,7 +201,7 @@
       border-radius: 24px;
       background: var(--panel);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.025);
-      transition: opacity 160ms ease, transform 160ms ease, border-color 160ms ease;
+      transition: opacity 160ms ease, transform 160ms ease;
     }
 
     .task:active { transform: scale(0.992); }
@@ -445,7 +211,6 @@
       position: relative;
       width: clamp(42px, 8vw, 58px);
       height: clamp(42px, 8vw, 58px);
-      flex: 0 0 auto;
       border: 2px solid #66707f;
       border-radius: 50%;
       background: transparent;
@@ -538,27 +303,133 @@
       text-align: center;
     }
 
-    .footer-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 8px 14px;
-    }
-
     .sync-status.error { color: var(--danger); }
 
-    .sign-out {
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: transparent;
-      color: #6f7886;
-      font-weight: 700;
+    body.keyboard-open { overflow: hidden; }
+
+    .keyboard-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(2, 4, 8, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .keyboard-panel {
+      width: min(100%, 760px);
+      max-height: calc(100dvh - 32px);
+      overflow-y: auto;
+      padding: clamp(20px, 4vw, 32px);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: rgba(15, 18, 25, 0.98);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.62);
+    }
+
+    .keyboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .keyboard-title {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 42px);
+      letter-spacing: -0.035em;
+    }
+
+    .keyboard-close {
+      display: grid;
+      place-items: center;
+      width: clamp(54px, 9vw, 68px);
+      height: clamp(54px, 9vw, 68px);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-size: clamp(28px, 5vw, 38px);
+    }
+
+    .draft-display {
+      min-height: clamp(92px, 15vw, 132px);
+      margin-bottom: 18px;
+      padding: 20px 22px;
+      border: 1px solid rgba(155, 240, 11, 0.28);
+      border-radius: 22px;
+      background: #0a0d12;
+      color: var(--text);
+      font-size: clamp(25px, 4.5vw, 34px);
+      font-weight: 650;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .draft-display.empty { color: #6e7684; }
+
+    .draft-caret {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      margin-left: 3px;
+      vertical-align: -0.12em;
+      border-radius: 2px;
+      background: var(--accent);
+      animation: blink 900ms steps(1) infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(7px, 1.4vw, 11px);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      gap: clamp(5px, 1.1vw, 9px);
+    }
+
+    .key {
+      display: grid;
+      place-items: center;
+      flex: 1 1 0;
+      min-width: 0;
+      height: clamp(56px, 9.5vw, 76px);
+      padding: 0 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: clamp(10px, 2vw, 16px);
+      background: #252b36;
+      color: var(--text);
+      font-size: clamp(18px, 3.5vw, 27px);
+      font-weight: 750;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .key:active { transform: scale(0.94); background: #343c49; }
+    .key-wide { flex: 1.55 1 0; }
+    .key-space { flex: 4.2 1 0; color: var(--muted); font-size: clamp(15px, 2.7vw, 20px); }
+    .key-action { flex: 2.2 1 0; background: var(--accent); color: #11150a; }
+    .key-shift.active { background: var(--accent-soft); border-color: rgba(155, 240, 11, 0.45); color: var(--accent); }
+
+    .keyboard-hint {
+      margin: 16px 0 0;
+      color: #687180;
+      font-size: clamp(12px, 2.2vw, 16px);
+      text-align: center;
     }
 
     @media (max-width: 430px) {
-      .app, .auth-screen { padding-inline: 14px; }
-      .auth-card { padding-inline: 20px; }
+      .app { padding-inline: 14px; }
       .composer { gap: 8px; padding: 8px; border-radius: 22px; }
       #taskInput { padding-inline: 15px; }
       .task { gap: 13px; padding-left: 16px; }
@@ -574,29 +445,7 @@
   </style>
 </head>
 <body>
-  <section class="auth-screen" id="authScreen">
-    <div class="auth-card">
-      <div class="auth-mark" aria-hidden="true">✓</div>
-      <p class="auth-eyebrow">Y70 Dashboard</p>
-      <h1 class="auth-title">Cloud Tasks</h1>
-      <p class="auth-copy">Sign in with the Firebase user you created. Your tasks live in Firestore and reload from the cloud. Nexus uses a restricted iframe, so you may need to sign in again after each restart.</p>
-
-      <form class="auth-form" id="loginForm" autocomplete="off">
-        <div class="auth-field">
-          <label for="emailInput">Email</label>
-          <input id="emailInput" type="email" inputmode="none" readonly aria-label="Email address. Tap to use touch keyboard." />
-        </div>
-        <div class="auth-field">
-          <label for="passwordInput">Password</label>
-          <input id="passwordInput" type="password" inputmode="none" readonly aria-label="Password. Tap to use touch keyboard." />
-        </div>
-        <button class="auth-button" id="loginButton" type="submit">Sign in</button>
-        <p class="auth-message" id="authMessage">Sign in to load your cloud tasks.</p>
-      </form>
-    </div>
-  </section>
-
-  <main class="app" id="app" hidden>
+  <main class="app" id="app">
     <header class="header">
       <div>
         <p class="eyebrow">Y70 Dashboard</p>
@@ -624,57 +473,47 @@
     </form>
 
     <div class="toolbar">
-      <span id="progressLabel">Loading tasks…</span>
+      <span id="progressLabel">Loading cloud tasks…</span>
       <button id="clearCompleted" type="button" disabled>Clear done</button>
     </div>
 
     <section aria-live="polite">
       <ul class="task-list" id="taskList"></ul>
-      <div class="empty" id="emptyState">
+      <div class="empty" id="emptyState" hidden>
         <div>
           <div class="empty-icon" aria-hidden="true">✓</div>
           <strong>You're all clear.</strong>
-          <p>Add a task above. Your list is synced with Firebase automatically.</p>
+          <p>Add a task above. This list reloads from Firebase automatically.</p>
         </div>
       </div>
     </section>
 
     <footer class="footer">
-      <div class="footer-row">
-        <span class="sync-status" id="syncStatus">Connecting to Firebase…</span>
-        <span aria-hidden="true">·</span>
-        <button class="sign-out" id="signOutButton" type="button">Sign out</button>
-      </div>
+      <span class="sync-status" id="syncStatus">Connecting to Firebase…</span>
     </footer>
   </main>
 
   <div class="keyboard-overlay" id="keyboardOverlay" role="dialog" aria-modal="true" aria-labelledby="keyboardTitle" hidden>
     <div class="keyboard-panel">
       <div class="keyboard-header">
-        <h2 class="keyboard-title" id="keyboardTitle">Touch keyboard</h2>
+        <h2 class="keyboard-title" id="keyboardTitle">New task</h2>
         <button class="keyboard-close" id="keyboardClose" type="button" aria-label="Close keyboard">×</button>
       </div>
 
-      <div class="draft-display empty" id="draftDisplay" role="textbox" aria-label="Typed text" aria-live="polite"></div>
+      <div class="draft-display empty" id="draftDisplay" role="textbox" aria-label="New task text" aria-live="polite"></div>
       <div class="keyboard" id="touchKeyboard" aria-label="Touch keyboard"></div>
-      <p class="keyboard-hint" id="keyboardHint">Touch the keys to type</p>
+      <p class="keyboard-hint" id="keyboardHint">Touch the keys to type · 180 characters maximum</p>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
     import {
-      inMemoryPersistence,
-      initializeAuth,
-      onAuthStateChanged,
-      signInWithEmailAndPassword,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-    import {
       collection,
       deleteDoc,
       doc,
-      getFirestore,
+      initializeFirestore,
+      memoryLocalCache,
       onSnapshot,
       orderBy,
       query,
@@ -693,18 +532,10 @@
     };
 
     const firebaseApp = initializeApp(firebaseConfig);
-    const auth = initializeAuth(firebaseApp, {
-      persistence: inMemoryPersistence
+    const db = initializeFirestore(firebaseApp, {
+      localCache: memoryLocalCache()
     });
-    const db = getFirestore(firebaseApp);
 
-    const authScreen = document.getElementById("authScreen");
-    const app = document.getElementById("app");
-    const loginForm = document.getElementById("loginForm");
-    const emailInput = document.getElementById("emailInput");
-    const passwordInput = document.getElementById("passwordInput");
-    const loginButton = document.getElementById("loginButton");
-    const authMessage = document.getElementById("authMessage");
     const taskForm = document.getElementById("taskForm");
     const taskInput = document.getElementById("taskInput");
     const openKeyboardButton = document.getElementById("openKeyboardButton");
@@ -721,25 +552,21 @@
     const clearCompleted = document.getElementById("clearCompleted");
     const dateLabel = document.getElementById("dateLabel");
     const syncStatus = document.getElementById("syncStatus");
-    const signOutButton = document.getElementById("signOutButton");
 
     let tasks = [];
-    let currentUser = null;
+    let tasksLoaded = false;
     let unsubscribeTasks = null;
     let draftText = "";
     let shiftOn = true;
     let keyboardMode = "letters";
-    let keyboardContext = null;
     let keyboardBusy = false;
 
-    function taskCollection(user = currentUser) {
-      if (!user) throw new Error("You must be signed in.");
-      return collection(db, "users", user.uid, "tasks");
+    function taskCollection() {
+      return collection(db, "lists", "main", "tasks");
     }
 
-    function taskDocument(id, user = currentUser) {
-      if (!user) throw new Error("You must be signed in.");
-      return doc(db, "users", user.uid, "tasks", id);
+    function taskDocument(id) {
+      return doc(db, "lists", "main", "tasks", id);
     }
 
     function makeId() {
@@ -750,28 +577,15 @@
     }
 
     function isValidTask(task) {
-      return task && typeof task.id === "string" && typeof task.text === "string" && typeof task.done === "boolean";
-    }
-
-    function setAuthMessage(message, isError = false) {
-      authMessage.textContent = message;
-      authMessage.classList.toggle("error", isError);
+      return task
+        && typeof task.id === "string"
+        && typeof task.text === "string"
+        && typeof task.done === "boolean";
     }
 
     function setSyncStatus(message, isError = false) {
       syncStatus.textContent = message;
       syncStatus.classList.toggle("error", isError);
-    }
-
-    function friendlyAuthError(error) {
-      const code = error?.code || "";
-      if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found") {
-        return "Email or password is incorrect.";
-      }
-      if (code === "auth/invalid-email") return "That email address is not valid.";
-      if (code === "auth/too-many-requests") return "Too many sign-in attempts. Please wait and try again.";
-      if (code === "auth/network-request-failed") return "Could not reach Firebase. Check the PC's internet connection.";
-      return error?.message || "Sign-in failed.";
     }
 
     function makeKey(label, { key = null, action = null, className = "", ariaLabel = "" } = {}) {
@@ -800,46 +614,49 @@
         addKeyboardRow(Array.from("qwertyuiop", (value) => makeKey(shiftOn ? value.toUpperCase() : value, { key: value })));
         addKeyboardRow(Array.from("asdfghjkl", (value) => makeKey(shiftOn ? value.toUpperCase() : value, { key: value })));
 
-        const shift = makeKey("⇧", { action: "shift", className: `key-wide key-shift${shiftOn ? " active" : ""}`, ariaLabel: "Shift" });
+        const shift = makeKey("⇧", {
+          action: "shift",
+          className: `key-wide key-shift${shiftOn ? " active" : ""}`,
+          ariaLabel: "Shift"
+        });
         shift.setAttribute("aria-pressed", String(shiftOn));
         const letters = Array.from("zxcvbnm", (value) => makeKey(shiftOn ? value.toUpperCase() : value, { key: value }));
         const backspace = makeKey("⌫", { action: "backspace", className: "key-wide", ariaLabel: "Backspace" });
         addKeyboardRow([shift, ...letters, backspace]);
 
-        const bottom = [
+        addKeyboardRow([
           makeKey("#+=", { action: "symbols", className: "key-wide", ariaLabel: "Show symbols" }),
-          makeKey("@", { key: "@" }),
           makeKey(".", { key: "." }),
-          makeKey("_", { key: "_" })
-        ];
-        if (keyboardContext?.allowSpace !== false) bottom.push(makeKey("Space", { key: " ", className: "key-space" }));
-        bottom.push(makeKey("-", { key: "-" }));
-        bottom.push(makeKey(keyboardContext?.actionLabel || "Done", { action: "commit", className: "key-action" }));
-        addKeyboardRow(bottom);
+          makeKey(",", { key: "," }),
+          makeKey("Space", { key: " ", className: "key-space" }),
+          makeKey("-", { key: "-" }),
+          makeKey("Add", { action: "commit", className: "key-action" })
+        ]);
       } else {
         const symbolRows = [
           ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"],
           ["-", "_", "+", "=", "/", "\\", ":", ";", "'", "\""],
           ["[", "]", "{", "}", "<", ">", ",", ".", "?", "`"]
         ];
-        for (const symbols of symbolRows) addKeyboardRow(symbols.map((value) => makeKey(value, { key: value })));
 
-        const bottom = [makeKey("ABC", { action: "letters", className: "key-wide", ariaLabel: "Show letters" })];
-        if (keyboardContext?.allowSpace !== false) bottom.push(makeKey("Space", { key: " ", className: "key-space" }));
-        bottom.push(makeKey("⌫", { action: "backspace", className: "key-wide", ariaLabel: "Backspace" }));
-        bottom.push(makeKey(keyboardContext?.actionLabel || "Done", { action: "commit", className: "key-action" }));
-        addKeyboardRow(bottom);
+        for (const symbols of symbolRows) {
+          addKeyboardRow(symbols.map((value) => makeKey(value, { key: value })));
+        }
+
+        addKeyboardRow([
+          makeKey("ABC", { action: "letters", className: "key-wide", ariaLabel: "Show letters" }),
+          makeKey("Space", { key: " ", className: "key-space" }),
+          makeKey("⌫", { action: "backspace", className: "key-wide", ariaLabel: "Backspace" }),
+          makeKey("Add", { action: "commit", className: "key-action" })
+        ]);
       }
     }
 
     function renderDraft() {
       draftDisplay.replaceChildren();
       const isEmpty = !draftText;
-      const displayText = isEmpty
-        ? (keyboardContext?.placeholder || "Type here…")
-        : (keyboardContext?.mask ? "•".repeat(Array.from(draftText).length) : draftText);
       draftDisplay.classList.toggle("empty", isEmpty);
-      draftDisplay.append(document.createTextNode(displayText));
+      draftDisplay.append(document.createTextNode(isEmpty ? "Type your task…" : draftText));
 
       const caret = document.createElement("span");
       caret.className = "draft-caret";
@@ -847,14 +664,13 @@
       draftDisplay.appendChild(caret);
     }
 
-    function openKeyboard(options) {
-      keyboardContext = options;
-      draftText = options.initialValue || "";
+    function openTaskKeyboard() {
+      draftText = "";
       shiftOn = true;
       keyboardMode = "letters";
       keyboardBusy = false;
-      keyboardTitle.textContent = options.title || "Touch keyboard";
-      keyboardHint.textContent = options.hint || `Touch the keys to type · ${options.maxLength || 180} characters maximum`;
+      keyboardTitle.textContent = "New task";
+      keyboardHint.textContent = "Touch the keys to type · 180 characters maximum";
       renderDraft();
       renderKeyboard();
       keyboardOverlay.hidden = false;
@@ -865,18 +681,17 @@
       keyboardOverlay.hidden = true;
       document.body.classList.remove("keyboard-open");
       draftText = "";
-      keyboardContext = null;
       keyboardBusy = false;
       touchKeyboard.replaceChildren();
     }
 
     function insertKey(value) {
-      const maxLength = keyboardContext?.maxLength || 180;
-      if (Array.from(draftText).length >= maxLength) return;
-      if (value === " " && keyboardContext?.allowSpace === false) return;
+      if (Array.from(draftText).length >= 180) return;
 
       let nextValue = value;
-      if (/^[a-z]$/i.test(value)) nextValue = shiftOn ? value.toUpperCase() : value.toLowerCase();
+      if (/^[a-z]$/i.test(value)) {
+        nextValue = shiftOn ? value.toUpperCase() : value.toLowerCase();
+      }
 
       draftText += nextValue;
       renderDraft();
@@ -894,65 +709,23 @@
     }
 
     async function commitKeyboard() {
-      if (keyboardBusy || !keyboardContext?.onCommit) return;
+      if (keyboardBusy) return;
       keyboardBusy = true;
       try {
-        const shouldClose = await keyboardContext.onCommit(draftText);
-        if (shouldClose !== false) closeKeyboard();
+        const saved = await addTask(draftText);
+        if (saved) closeKeyboard();
       } finally {
         keyboardBusy = false;
       }
     }
 
-    function openEmailKeyboard() {
-      openKeyboard({
-        title: "Email address",
-        initialValue: emailInput.value,
-        placeholder: "name@example.com",
-        maxLength: 160,
-        allowSpace: false,
-        actionLabel: "Done",
-        onCommit(value) {
-          emailInput.value = value.trim();
-          return true;
-        }
-      });
-    }
-
-    function openPasswordKeyboard() {
-      openKeyboard({
-        title: "Password",
-        initialValue: passwordInput.value,
-        placeholder: "Enter password",
-        maxLength: 128,
-        allowSpace: true,
-        mask: true,
-        actionLabel: "Done",
-        onCommit(value) {
-          passwordInput.value = value;
-          return true;
-        }
-      });
-    }
-
-    function openTaskKeyboard() {
-      openKeyboard({
-        title: "New task",
-        initialValue: "",
-        placeholder: "Type your task…",
-        maxLength: 180,
-        allowSpace: true,
-        actionLabel: "Add",
-        onCommit: addTask
-      });
-    }
-
     async function addTask(text) {
       const cleanText = text.trim();
-      if (!cleanText || !currentUser) return false;
-      const id = makeId();
+      if (!cleanText) return false;
+
       setSyncStatus("Saving…");
       try {
+        const id = makeId();
         await setDoc(taskDocument(id), {
           text: cleanText,
           done: false,
@@ -967,27 +740,24 @@
     }
 
     async function toggleTask(task) {
-      if (!currentUser) return;
       try {
         await updateDoc(taskDocument(task.id), { done: !task.done });
       } catch (error) {
         console.error("Could not update task:", error);
-        setSyncStatus("Update failed", true);
+        setSyncStatus("Update failed — check Firestore rules", true);
       }
     }
 
     async function deleteTask(id) {
-      if (!currentUser) return;
       try {
         await deleteDoc(taskDocument(id));
       } catch (error) {
         console.error("Could not delete task:", error);
-        setSyncStatus("Delete failed", true);
+        setSyncStatus("Delete failed — check Firestore rules", true);
       }
     }
 
     async function clearDoneTasks() {
-      if (!currentUser) return;
       const doneTasks = tasks.filter((task) => task.done);
       if (!doneTasks.length) return;
 
@@ -1001,23 +771,26 @@
       }
     }
 
-    function subscribeToTasks(user) {
+    function subscribeToTasks() {
       if (unsubscribeTasks) unsubscribeTasks();
       setSyncStatus("Loading cloud tasks…");
 
-      const taskQuery = query(taskCollection(user), orderBy("createdAt", "desc"));
+      const taskQuery = query(taskCollection(), orderBy("createdAt", "desc"));
       unsubscribeTasks = onSnapshot(taskQuery, (snapshot) => {
         tasks = snapshot.docs.map((snapshotDoc) => ({
           id: snapshotDoc.id,
           ...snapshotDoc.data()
         })).filter(isValidTask);
+        tasksLoaded = true;
         render();
         setSyncStatus("Cloud synced");
       }, (error) => {
         console.error("Could not sync tasks:", error);
         tasks = [];
+        tasksLoaded = false;
         render();
-        setSyncStatus("Sync blocked — check Firestore rules", true);
+        setSyncStatus("Sync blocked — update Firestore rules", true);
+        progressLabel.textContent = "Could not load cloud tasks";
       });
     }
 
@@ -1054,10 +827,12 @@
       const done = tasks.filter((task) => task.done).length;
       const open = tasks.length - done;
       openCount.textContent = String(open);
-      emptyState.hidden = tasks.length > 0;
+      emptyState.hidden = !tasksLoaded || tasks.length > 0;
       clearCompleted.disabled = done === 0;
 
-      if (tasks.length === 0) {
+      if (!tasksLoaded) {
+        progressLabel.textContent = "Loading cloud tasks…";
+      } else if (tasks.length === 0) {
         progressLabel.textContent = "Nothing to do";
       } else if (open === 0) {
         progressLabel.textContent = "All tasks complete";
@@ -1065,29 +840,6 @@
         progressLabel.textContent = `${open} ${open === 1 ? "task" : "tasks"} to go`;
       } else {
         progressLabel.textContent = `${done} of ${tasks.length} complete`;
-      }
-    }
-
-    async function handleLogin(event) {
-      event.preventDefault();
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
-
-      if (!email || !password) {
-        setAuthMessage("Enter both your email and password using the touch fields above.", true);
-        return;
-      }
-
-      loginButton.disabled = true;
-      setAuthMessage("Signing in…");
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        passwordInput.value = "";
-      } catch (error) {
-        console.error("Sign-in failed:", error);
-        setAuthMessage(friendlyAuthError(error), true);
-      } finally {
-        loginButton.disabled = false;
       }
     }
 
@@ -1115,7 +867,7 @@
     });
 
     document.addEventListener("keydown", (event) => {
-      if (keyboardOverlay.hidden || !keyboardContext) return;
+      if (keyboardOverlay.hidden) return;
 
       if (event.key === "Escape") {
         closeKeyboard();
@@ -1131,12 +883,6 @@
       }
     });
 
-    emailInput.addEventListener("click", openEmailKeyboard);
-    emailInput.addEventListener("focus", () => emailInput.blur());
-    passwordInput.addEventListener("click", openPasswordKeyboard);
-    passwordInput.addEventListener("focus", () => passwordInput.blur());
-    loginForm.addEventListener("submit", handleLogin);
-
     taskForm.addEventListener("submit", (event) => {
       event.preventDefault();
       openTaskKeyboard();
@@ -1150,15 +896,6 @@
     });
     clearCompleted.addEventListener("click", clearDoneTasks);
 
-    signOutButton.addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-      } catch (error) {
-        console.error("Could not sign out:", error);
-        setSyncStatus("Could not sign out", true);
-      }
-    });
-
     dateLabel.textContent = new Intl.DateTimeFormat(undefined, {
       weekday: "long",
       day: "numeric",
@@ -1166,30 +903,7 @@
     }).format(new Date());
 
     render();
-
-    onAuthStateChanged(auth, async (user) => {
-      if (unsubscribeTasks) {
-        unsubscribeTasks();
-        unsubscribeTasks = null;
-      }
-
-      currentUser = user;
-      tasks = [];
-      render();
-
-      if (!user) {
-        app.hidden = true;
-        authScreen.hidden = false;
-        setAuthMessage("Sign in to load your cloud tasks.");
-        return;
-      }
-
-      authScreen.hidden = true;
-      app.hidden = false;
-      emailInput.value = user.email || emailInput.value;
-      passwordInput.value = "";
-      subscribeToTasks(user);
-    });
+    subscribeToTasks();
   </script>
 </body>
 </html>
