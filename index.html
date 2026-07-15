@@ -6,59 +6,727 @@
 <meta name="theme-color" content="#090b10">
 <title>Y70 Tasks</title>
 <style>
-:root{color-scheme:dark;--bg:#090b10;--panel:rgba(19,23,32,.94);--panel2:#171b23;--text:#f7f8fb;--muted:#959dac;--line:rgba(255,255,255,.1);--accent:#ca3229;--accent-soft:rgba(202,50,41,.16);--danger:#ff6b7a}
-*{box-sizing:border-box}[hidden]{display:none!important}html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}body{min-height:100dvh;overflow:hidden;background:radial-gradient(circle at 50% -8%,rgba(202,50,41,.16),transparent 24rem),linear-gradient(180deg,#0c1016 0%,var(--bg) 42%)}button,input{font:inherit}button{border:0;color:inherit;cursor:pointer;touch-action:manipulation}
-.app{width:min(100%,760px);height:100dvh;margin:0 auto;padding:clamp(10px,1.6vh,20px) clamp(12px,2.5vw,24px) 10px;display:flex;flex-direction:column;gap:8px;overflow:hidden}.eyebrow{margin:0;color:var(--accent);font-size:clamp(10px,1.7vw,13px);font-weight:850;letter-spacing:.13em;text-transform:uppercase;text-align:center;flex:0 0 auto}.header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto}h1{margin:0;font-size:clamp(31px,6.5vw,50px);line-height:.98;letter-spacing:-.05em}.count{min-width:58px;padding:8px 9px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.045);text-align:center}.count strong{display:block;font-size:clamp(20px,4vw,31px);line-height:1}.count span{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.composer{display:grid;grid-template-columns:1fr auto;gap:7px;padding:7px;border:1px solid var(--line);border-radius:16px;background:rgba(15,18,25,.9);box-shadow:0 10px 28px rgba(0,0,0,.25);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);flex:0 0 auto}#headingInput{width:100%;min-width:0;height:clamp(46px,7vw,58px);padding:0 13px;border:0;outline:0;border-radius:12px;background:transparent;color:var(--text);font-size:clamp(16px,2.8vw,22px);cursor:pointer;caret-color:transparent}#headingInput::placeholder{color:#6e7684}.add{width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:12px;background:var(--accent);color:#fff;font-size:clamp(26px,4.5vw,36px);font-weight:500;line-height:1;box-shadow:0 8px 24px rgba(202,50,41,.24)}.add:active,.section-add:active,.section-delete:active{transform:scale(.94)}
-.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:clamp(11px,2vw,15px);flex:0 0 auto}.toolbar button{padding:7px 9px;border-radius:9px;background:transparent;color:var(--muted);font-weight:700}.toolbar button:disabled{opacity:.35;cursor:default}.viewport{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:3px}.viewport.empty-mode{overflow-y:hidden;padding-right:0}.sections{display:flex;flex-direction:column;gap:10px;padding-bottom:4px}.section{border:1px solid var(--line);border-radius:15px;background:rgba(17,21,29,.72);overflow:hidden}.section-head{min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 7px 6px 12px;background:rgba(255,255,255,.025);border-bottom:1px solid var(--line)}.section-title{min-width:0;margin:0;font-size:clamp(17px,3.2vw,23px);line-height:1.1;letter-spacing:-.025em;overflow-wrap:anywhere}.section-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.section-meta{min-width:24px;color:var(--muted);font-size:10px;font-weight:800;text-align:center}.section-add,.section-delete{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.055);font-size:22px;line-height:1}.section-add{background:var(--accent);color:#fff}.section-delete{color:#77808f}.tasks{display:flex;flex-direction:column;gap:5px;margin:0;padding:6px;list-style:none}.task{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:9px;min-height:clamp(48px,7.6vw,62px);padding:7px 8px 7px 10px;border:1px solid rgba(255,255,255,.065);border-radius:12px;background:var(--panel);transition:opacity 160ms ease,transform 160ms ease}.task:active{transform:scale(.992)}.task.done{opacity:.58;background:rgba(19,23,32,.66)}.check{position:relative;width:clamp(28px,4.8vw,37px);height:clamp(28px,4.8vw,37px);border:2px solid #66707f;border-radius:50%;background:transparent}.task.done .check{border-color:var(--accent);background:var(--accent)}.task.done .check:after{content:"";position:absolute;left:34%;top:19%;width:20%;height:42%;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}.task-text{min-width:0;overflow-wrap:anywhere;font-size:clamp(15px,2.8vw,20px);font-weight:650;line-height:1.17;letter-spacing:-.02em}.task.done .task-text{color:#9ca3ad;text-decoration:line-through;text-decoration-thickness:2px}.delete{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:transparent;color:#77808f;font-size:22px}.delete:active{background:rgba(255,107,122,.12);color:var(--danger)}.section-empty{margin:0;padding:10px 12px 12px;color:#69717e;font-size:12px;text-align:center}
-.empty{display:grid;place-items:center;height:100%;min-height:0;padding:18px;border:1px dashed rgba(255,255,255,.14);border-radius:20px;text-align:center;color:var(--muted)}.empty-icon{display:grid;place-items:center;width:60px;height:60px;margin:0 auto 12px;border-radius:19px;background:var(--accent-soft);color:var(--accent);font-size:32px}.empty strong{display:block;margin-bottom:5px;color:var(--text);font-size:clamp(19px,3.7vw,26px)}.empty p{max-width:360px;margin:0;font-size:clamp(13px,2.5vw,17px);line-height:1.4}.footer{flex:0 0 auto;padding-top:1px;color:#5e6673;font-size:10px;text-align:center}.sync.error{color:var(--danger)}
-body.keyboard-open{overflow:hidden}.keyboard-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;padding:16px;background:rgba(2,4,8,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.keyboard-panel{width:min(100%,760px);max-height:calc(100dvh - 32px);overflow-y:auto;padding:clamp(20px,4vw,32px);border:1px solid var(--line);border-radius:30px;background:rgba(15,18,25,.98);box-shadow:0 30px 100px rgba(0,0,0,.62)}.keyboard-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.keyboard-head h2{margin:0;font-size:clamp(28px,5vw,42px);letter-spacing:-.035em}.close{display:grid;place-items:center;width:clamp(54px,9vw,68px);height:clamp(54px,9vw,68px);border-radius:18px;background:rgba(255,255,255,.06);color:var(--muted);font-size:clamp(28px,5vw,38px)}.draft{min-height:clamp(92px,15vw,132px);margin-bottom:18px;padding:20px 22px;border:1px solid rgba(202,50,41,.34);border-radius:22px;background:#0a0d12;color:var(--text);font-size:clamp(25px,4.5vw,34px);font-weight:650;line-height:1.3;overflow-wrap:anywhere}.draft.draft-empty{color:#6e7684}.caret{display:inline-block;width:3px;height:1em;margin-left:3px;vertical-align:-.12em;border-radius:2px;background:var(--accent);animation:blink 900ms steps(1) infinite}@keyframes blink{50%{opacity:0}}.keyboard{display:flex;flex-direction:column;gap:clamp(7px,1.4vw,11px);user-select:none;-webkit-user-select:none}.key-row{display:flex;justify-content:center;gap:clamp(5px,1.1vw,9px)}.key{display:grid;place-items:center;flex:1 1 0;min-width:0;height:clamp(56px,9.5vw,76px);padding:0 4px;border:1px solid rgba(255,255,255,.08);border-radius:clamp(10px,2vw,16px);background:#252b36;color:var(--text);font-size:clamp(18px,3.5vw,27px);font-weight:750}.key:active{transform:scale(.94);background:#343c49}.key-wide{flex:1.55 1 0}.key-space{flex:4.2 1 0;color:var(--muted);font-size:clamp(15px,2.7vw,20px)}.key-action{flex:2.2 1 0;background:var(--accent);color:#fff}.key-shift.active{background:var(--accent-soft);border-color:rgba(202,50,41,.5);color:var(--accent)}.keyboard-hint{margin:16px 0 0;color:#687180;font-size:clamp(12px,2.2vw,16px);text-align:center}
-@media(max-width:430px){.app{padding-inline:9px}.keyboard-overlay{padding:8px}.keyboard-panel{padding:16px 12px 18px;border-radius:24px}.key{height:58px}.section-head{padding-left:10px}.tasks{padding:5px}.task{padding-left:8px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+:root{color-scheme:dark;--bg:#090b10;--panel:rgba(19,23,32,.94);--text:#f7f8fb;--muted:#959dac;--line:rgba(255,255,255,.1);--accent:#ca3229;--accent-soft:rgba(202,50,41,.16);--danger:#ff6b7a}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
+body{min-height:100dvh;overflow:hidden;background:radial-gradient(circle at 50% -8%,rgba(202,50,41,.16),transparent 24rem),linear-gradient(180deg,#0c1016 0%,var(--bg) 42%)}
+button,input{font:inherit}button{border:0;color:inherit;cursor:pointer;touch-action:manipulation}
+.app{width:min(100%,760px);height:100dvh;margin:0 auto;padding:clamp(9px,1.4vh,18px) clamp(10px,2.2vw,22px) 9px;display:flex;flex-direction:column;gap:7px;overflow:hidden}
+.eyebrow{margin:0;color:var(--accent);font-size:clamp(10px,1.7vw,13px);font-weight:850;letter-spacing:.13em;text-transform:uppercase;text-align:center;flex:0 0 auto}
+.sheetbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:5px;flex:0 0 auto}
+.sheet-tabs{display:flex;align-items:center;gap:5px;min-width:0;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
+.sheet-tabs::-webkit-scrollbar{display:none}
+.sheet-tab{flex:0 0 auto;max-width:180px;height:34px;padding:0 11px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.045);color:var(--muted);font-size:clamp(11px,2vw,14px);font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sheet-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.sheet-control{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.06);color:var(--muted);font-size:21px;font-weight:700}
+.sheet-control.add-sheet{background:var(--accent);color:#fff}.sheet-control:disabled{opacity:.3;cursor:default}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto}
+h1{margin:0;font-size:clamp(30px,6.2vw,48px);line-height:.98;letter-spacing:-.05em}
+.count{min-width:56px;padding:7px 8px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.045);text-align:center}
+.count strong{display:block;font-size:clamp(20px,3.8vw,29px);line-height:1}
+.count span{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.composer{display:grid;grid-template-columns:1fr auto;gap:6px;padding:6px;border:1px solid var(--line);border-radius:15px;background:rgba(15,18,25,.9);box-shadow:0 10px 28px rgba(0,0,0,.25);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);flex:0 0 auto}
+#headingInput{width:100%;min-width:0;height:clamp(44px,6.6vw,55px);padding:0 12px;border:0;outline:0;border-radius:11px;background:transparent;color:var(--text);font-size:clamp(15px,2.7vw,21px);cursor:pointer;caret-color:transparent}
+#headingInput::placeholder{color:#6e7684}
+.add{width:clamp(44px,6.6vw,55px);height:clamp(44px,6.6vw,55px);border-radius:11px;background:var(--accent);color:#fff;font-size:clamp(25px,4.2vw,34px);font-weight:500;line-height:1;box-shadow:0 8px 24px rgba(202,50,41,.24)}
+.add:active,.section-add:active,.section-delete:active,.sheet-control:active:not(:disabled){transform:scale(.94)}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:clamp(11px,1.9vw,14px);flex:0 0 auto}
+.toolbar button{padding:6px 8px;border-radius:9px;background:transparent;color:var(--muted);font-weight:700}
+.toolbar button:disabled{opacity:.35;cursor:default}
+.viewport{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:3px}
+.viewport.empty-mode{overflow-y:hidden;padding-right:0}
+.sections{display:flex;flex-direction:column;gap:8px;padding-bottom:4px}
+.section{border:1px solid var(--line);border-radius:14px;background:rgba(17,21,29,.72);overflow:hidden}
+.section-head{min-height:41px;display:flex;align-items:center;justify-content:space-between;gap:9px;padding:5px 6px 5px 11px;background:rgba(255,255,255,.025);border-bottom:1px solid var(--line)}
+.section-title{min-width:0;margin:0;font-size:clamp(16px,3vw,22px);line-height:1.1;letter-spacing:-.025em;overflow-wrap:anywhere}
+.section-actions{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.section-meta{min-width:22px;color:var(--muted);font-size:10px;font-weight:800;text-align:center}
+.section-add,.section-delete{display:grid;place-items:center;width:31px;height:31px;border-radius:9px;background:rgba(255,255,255,.055);font-size:20px;line-height:1}
+.section-add{background:var(--accent);color:#fff}.section-delete{color:#77808f}
+.tasks{display:flex;flex-direction:column;gap:4px;margin:0;padding:5px;list-style:none}
+.task{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;min-height:clamp(45px,7vw,58px);padding:6px 7px 6px 9px;border:1px solid rgba(255,255,255,.065);border-radius:11px;background:var(--panel);transition:opacity 160ms ease,transform 160ms ease,border-color 160ms ease,box-shadow 160ms ease;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.task:active{transform:scale(.992)}.task.done{opacity:.58;background:rgba(19,23,32,.66)}
+.task.dragging{opacity:.92;transform:scale(1.015);border-color:var(--accent);box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(202,50,41,.28);z-index:5}
+body.task-dragging .task:not(.dragging){transition:transform 90ms ease}
+.check{position:relative;width:clamp(27px,4.5vw,35px);height:clamp(27px,4.5vw,35px);border:2px solid #66707f;border-radius:50%;background:transparent}
+.task.done .check{border-color:var(--accent);background:var(--accent)}
+.task.done .check:after{content:"";position:absolute;left:34%;top:19%;width:20%;height:42%;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
+.task-text{min-width:0;overflow-wrap:anywhere;font-size:clamp(14px,2.7vw,19px);font-weight:650;line-height:1.17;letter-spacing:-.02em}
+.task.done .task-text{color:#9ca3ad;text-decoration:line-through;text-decoration-thickness:2px}
+.delete{display:grid;place-items:center;width:29px;height:29px;border-radius:9px;background:transparent;color:#77808f;font-size:21px}
+.delete:active{background:rgba(255,107,122,.12);color:var(--danger)}
+.section-empty{margin:0;padding:9px 11px 10px;color:#69717e;font-size:11px;text-align:center}
+.empty{display:grid;place-items:center;height:100%;min-height:0;padding:18px;border:1px dashed rgba(255,255,255,.14);border-radius:20px;text-align:center;color:var(--muted)}
+.empty-icon{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 11px;border-radius:18px;background:var(--accent-soft);color:var(--accent);font-size:31px}
+.empty strong{display:block;margin-bottom:5px;color:var(--text);font-size:clamp(19px,3.7vw,26px)}
+.empty p{max-width:360px;margin:0;font-size:clamp(13px,2.5vw,17px);line-height:1.4}
+.footer{flex:0 0 auto;padding-top:1px;color:#5e6673;font-size:10px;text-align:center}.sync.error{color:var(--danger)}
+body.keyboard-open{overflow:hidden}
+.keyboard-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;padding:16px;background:rgba(2,4,8,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.keyboard-panel{width:min(100%,760px);max-height:calc(100dvh - 32px);overflow-y:auto;padding:clamp(20px,4vw,32px);border:1px solid var(--line);border-radius:30px;background:rgba(15,18,25,.98);box-shadow:0 30px 100px rgba(0,0,0,.62)}
+.keyboard-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.keyboard-head h2{margin:0;font-size:clamp(28px,5vw,42px);letter-spacing:-.035em}
+.close{display:grid;place-items:center;width:clamp(54px,9vw,68px);height:clamp(54px,9vw,68px);border-radius:18px;background:rgba(255,255,255,.06);color:var(--muted);font-size:clamp(28px,5vw,38px)}
+.draft{min-height:clamp(92px,15vw,132px);margin-bottom:18px;padding:20px 22px;border:1px solid rgba(202,50,41,.34);border-radius:22px;background:#0a0d12;color:var(--text);font-size:clamp(25px,4.5vw,34px);font-weight:650;line-height:1.3;overflow-wrap:anywhere}
+.draft.draft-empty{color:#6e7684}
+.caret{display:inline-block;width:3px;height:1em;margin-left:3px;vertical-align:-.12em;border-radius:2px;background:var(--accent);animation:blink 900ms steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.keyboard{display:flex;flex-direction:column;gap:clamp(7px,1.4vw,11px);user-select:none;-webkit-user-select:none}.key-row{display:flex;justify-content:center;gap:clamp(5px,1.1vw,9px)}
+.key{display:grid;place-items:center;flex:1 1 0;min-width:0;height:clamp(56px,9.5vw,76px);padding:0 4px;border:1px solid rgba(255,255,255,.08);border-radius:clamp(10px,2vw,16px);background:#252b36;color:var(--text);font-size:clamp(18px,3.5vw,27px);font-weight:750}
+.key:active{transform:scale(.94);background:#343c49}.key-wide{flex:1.55 1 0}.key-space{flex:4.2 1 0;color:var(--muted);font-size:clamp(15px,2.7vw,20px)}.key-action{flex:2.2 1 0;background:var(--accent);color:#fff}.key-shift.active{background:var(--accent-soft);border-color:rgba(202,50,41,.5);color:var(--accent)}
+.keyboard-hint{margin:16px 0 0;color:#687180;font-size:clamp(12px,2.2vw,16px);text-align:center}
+@media(max-width:430px){.app{padding-inline:8px}.sheet-tab{max-width:150px;padding-inline:9px}.keyboard-overlay{padding:8px}.keyboard-panel{padding:16px 12px 18px;border-radius:24px}.key{height:58px}.section-head{padding-left:9px}.tasks{padding:4px}.task{padding-left:7px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <main class="app">
-<p class="eyebrow">Y70 Virtual List</p>
-<header class="header"><h1>Tasks</h1><div class="count" aria-label="Open task count"><strong id="openCount">0</strong><span>open</span></div></header>
-<form class="composer" id="headingForm" autocomplete="off"><input id="headingInput" type="text" maxlength="80" placeholder="Add a heading…" aria-label="Open touch keyboard to add a heading" inputmode="none" readonly><button class="add" id="openHeadingKeyboard" type="button" aria-label="Add heading">+</button></form>
-<div class="toolbar"><span id="progressLabel">Loading cloud tasks…</span><button id="clearCompleted" type="button" disabled>Clear done</button></div>
-<section class="viewport" id="taskViewport" aria-live="polite"><div class="sections" id="sections"></div><div class="empty" id="emptyState" hidden><div><div class="empty-icon" aria-hidden="true">✓</div><strong>No headings yet.</strong><p>Add a heading above, then use its red + button to add subtasks.</p></div></div></section>
-<footer class="footer"><span class="sync" id="syncStatus">Connecting to Firebase…</span></footer>
+  <p class="eyebrow">Y70 Virtual List</p>
+  <div class="sheetbar">
+    <div class="sheet-tabs" id="sheetTabs" aria-label="Task sheets"></div>
+    <button class="sheet-control add-sheet" id="addSheetButton" type="button" aria-label="Create new task sheet">+</button>
+    <button class="sheet-control" id="deleteSheetButton" type="button" aria-label="Delete current task sheet">×</button>
+  </div>
+  <header class="header">
+    <h1>Tasks</h1>
+    <div class="count" aria-label="Open task count"><strong id="openCount">0</strong><span>open</span></div>
+  </header>
+  <form class="composer" id="headingForm" autocomplete="off">
+    <input id="headingInput" type="text" maxlength="80" placeholder="Add a heading…" aria-label="Open touch keyboard to add a heading" inputmode="none" readonly>
+    <button class="add" id="openHeadingKeyboard" type="button" aria-label="Add heading">+</button>
+  </form>
+  <div class="toolbar"><span id="progressLabel">Loading cloud tasks…</span><button id="clearCompleted" type="button" disabled>Clear done</button></div>
+  <section class="viewport" id="taskViewport" aria-live="polite">
+    <div class="sections" id="sections"></div>
+    <div class="empty" id="emptyState" hidden><div><div class="empty-icon" aria-hidden="true">✓</div><strong>No headings yet.</strong><p>Add a heading above, then use its red + button to add subtasks.</p></div></div>
+  </section>
+  <footer class="footer"><span class="sync" id="syncStatus">Connecting to Firebase…</span></footer>
 </main>
-<div class="keyboard-overlay" id="keyboardOverlay" role="dialog" aria-modal="true" aria-labelledby="keyboardTitle" hidden><div class="keyboard-panel"><div class="keyboard-head"><h2 id="keyboardTitle">New heading</h2><button class="close" id="keyboardClose" type="button" aria-label="Close keyboard">×</button></div><div class="draft draft-empty" id="draftDisplay" role="textbox" aria-label="Typed text" aria-live="polite"></div><div class="keyboard" id="touchKeyboard" aria-label="Touch keyboard"></div><p class="keyboard-hint" id="keyboardHint">Touch the keys to type</p></div></div>
+<div class="keyboard-overlay" id="keyboardOverlay" role="dialog" aria-modal="true" aria-labelledby="keyboardTitle" hidden>
+  <div class="keyboard-panel">
+    <div class="keyboard-head"><h2 id="keyboardTitle">New heading</h2><button class="close" id="keyboardClose" type="button" aria-label="Close keyboard">×</button></div>
+    <div class="draft draft-empty" id="draftDisplay" role="textbox" aria-label="Typed text" aria-live="polite"></div>
+    <div class="keyboard" id="touchKeyboard" aria-label="Touch keyboard"></div>
+    <p class="keyboard-hint" id="keyboardHint">Touch the keys to type</p>
+  </div>
+</div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import{collection,deleteDoc,doc,initializeFirestore,memoryLocalCache,onSnapshot,orderBy,query,setDoc,updateDoc,writeBatch}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyBpEQjMvSPwkVbfUYP5KPxFl63SHT54E1E",authDomain:"hyte-fb587.firebaseapp.com",projectId:"hyte-fb587",storageBucket:"hyte-fb587.firebasestorage.app",messagingSenderId:"334285347441",appId:"1:334285347441:web:0563b6cdf1720be66659d0"};
+import{collection,deleteDoc,doc,initializeFirestore,memoryLocalCache,onSnapshot,setDoc,updateDoc,writeBatch}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyBpEQjMvSPwkVbfUYP5KPxFl63SHT54E1E",
+  authDomain:"hyte-fb587.firebaseapp.com",
+  projectId:"hyte-fb587",
+  storageBucket:"hyte-fb587.firebasestorage.app",
+  messagingSenderId:"334285347441",
+  appId:"1:334285347441:web:0563b6cdf1720be66659d0"
+};
+
 const db=initializeFirestore(initializeApp(firebaseConfig),{localCache:memoryLocalCache()});
-const $=id=>document.getElementById(id),headingForm=$("headingForm"),headingInput=$("headingInput"),openHeadingKeyboard=$("openHeadingKeyboard"),keyboardOverlay=$("keyboardOverlay"),keyboardClose=$("keyboardClose"),touchKeyboard=$("touchKeyboard"),draftDisplay=$("draftDisplay"),keyboardTitle=$("keyboardTitle"),keyboardHint=$("keyboardHint"),sections=$("sections"),taskViewport=$("taskViewport"),emptyState=$("emptyState"),openCount=$("openCount"),progressLabel=$("progressLabel"),clearCompleted=$("clearCompleted"),syncStatus=$("syncStatus");
+const $=id=>document.getElementById(id);
+const sheetTabs=$("sheetTabs"),addSheetButton=$("addSheetButton"),deleteSheetButton=$("deleteSheetButton"),headingForm=$("headingForm"),headingInput=$("headingInput"),openHeadingKeyboard=$("openHeadingKeyboard"),keyboardOverlay=$("keyboardOverlay"),keyboardClose=$("keyboardClose"),touchKeyboard=$("touchKeyboard"),draftDisplay=$("draftDisplay"),keyboardTitle=$("keyboardTitle"),keyboardHint=$("keyboardHint"),sections=$("sections"),taskViewport=$("taskViewport"),emptyState=$("emptyState"),openCount=$("openCount"),progressLabel=$("progressLabel"),clearCompleted=$("clearCompleted"),syncStatus=$("syncStatus");
+
 let items=[],loaded=false,draft="",shift=true,mode="letters",busy=false,unsubscribe=null,keyboardContext=null;
-const taskCollection=()=>collection(db,"lists","main","tasks"),itemDocument=id=>doc(db,"lists","main","tasks",id),makeId=()=>crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(16).slice(2)}`;
+let currentSheetId=null,bootstrapping=false,reorderBusy=false,deleteSheetArmedUntil=0,dragState=null;
+
+const taskCollection=()=>collection(db,"lists","main","tasks");
+const itemDocument=id=>doc(db,"lists","main","tasks",id);
+const settingsDocument=()=>itemDocument("__settings");
+const makeId=()=>globalThis.crypto?.randomUUID?globalThis.crypto.randomUUID():`${Date.now()}-${Math.random().toString(16).slice(2)}`;
+const isSheet=item=>item&&item.kind==="sheet"&&typeof item.id==="string"&&typeof item.text==="string";
+const isSettings=item=>item&&item.kind==="settings";
 const isHeading=item=>item&&item.kind==="heading"&&typeof item.id==="string"&&typeof item.text==="string";
-const isTask=item=>item&&item.kind!=="heading"&&typeof item.id==="string"&&typeof item.text==="string"&&typeof item.done==="boolean";
-function status(text,error=false){syncStatus.textContent=text;syncStatus.classList.toggle("error",error)}
-function key(label,{value=null,action=null,className="",aria=""}={}){const b=document.createElement("button");b.type="button";b.className=`key ${className}`.trim();b.textContent=label;if(value!==null)b.dataset.key=value;if(action)b.dataset.action=action;if(aria)b.setAttribute("aria-label",aria);return b}
-function row(keys){const r=document.createElement("div");r.className="key-row";r.append(...keys);touchKeyboard.append(r)}
-function renderKeyboard(){touchKeyboard.replaceChildren();if(mode==="letters"){row([..."1234567890"].map(v=>key(v,{value:v})));row([..."qwertyuiop"].map(v=>key(shift?v.toUpperCase():v,{value:v})));row([..."asdfghjkl"].map(v=>key(shift?v.toUpperCase():v,{value:v})));const sh=key("⇧",{action:"shift",className:`key-wide key-shift${shift?" active":""}`,aria:"Shift"});sh.setAttribute("aria-pressed",String(shift));row([sh,...[..."zxcvbnm"].map(v=>key(shift?v.toUpperCase():v,{value:v})),key("⌫",{action:"backspace",className:"key-wide",aria:"Backspace"})]);row([key("#+=",{action:"symbols",className:"key-wide",aria:"Show symbols"}),key(".",{value:"."}),key(",",{value:","}),key("Space",{value:" ",className:"key-space"}),key("-",{value:"-"}),key("Add",{action:"commit",className:"key-action"})])}else{for(const symbols of [["!","@","#","$","%","^","&","*","(",")"],["-","_","+","=","/","\\",":",";","'",'"'],["[","]","{","}","<",">",",",".","?","`"]])row(symbols.map(v=>key(v,{value:v})));row([key("ABC",{action:"letters",className:"key-wide",aria:"Show letters"}),key("Space",{value:" ",className:"key-space"}),key("⌫",{action:"backspace",className:"key-wide",aria:"Backspace"}),key("Add",{action:"commit",className:"key-action"})])}}
-function renderDraft(){draftDisplay.replaceChildren();const empty=!draft;draftDisplay.classList.toggle("draft-empty",empty);draftDisplay.append(document.createTextNode(empty?(keyboardContext?.placeholder||"Type here…"):draft));const c=document.createElement("span");c.className="caret";c.setAttribute("aria-hidden","true");draftDisplay.append(c)}
-function openKeyboard(context){keyboardContext=context;draft="";shift=true;mode="letters";busy=false;keyboardTitle.textContent=context.title;keyboardHint.textContent=`Touch the keys to type · ${context.maxLength} characters maximum`;renderDraft();renderKeyboard();keyboardOverlay.hidden=false;document.body.classList.add("keyboard-open")}
-function closeKeyboard(){keyboardOverlay.hidden=true;document.body.classList.remove("keyboard-open");draft="";busy=false;keyboardContext=null;touchKeyboard.replaceChildren()}
-function insert(value){const max=keyboardContext?.maxLength||180;if([...draft].length>=max)return;draft+=/^[a-z]$/i.test(value)?shift?value.toUpperCase():value.toLowerCase():value;renderDraft();if(/^[a-z]$/i.test(value)&&shift){shift=false;renderKeyboard()}}
-function backspace(){if(!draft)return;draft=[...draft].slice(0,-1).join("");renderDraft()}
-async function addHeading(text){const clean=text.trim();if(!clean)return false;status("Saving heading…");try{await setDoc(itemDocument(makeId()),{kind:"heading",text:clean,createdAt:Date.now()});return true}catch(error){console.error(error);status("Could not save heading",true);return false}}
-async function addTask(text,headingId=null){const clean=text.trim();if(!clean)return false;status("Saving task…");try{await setDoc(itemDocument(makeId()),{kind:"task",headingId,text:clean,done:false,createdAt:Date.now()});return true}catch(error){console.error(error);status("Could not save task",true);return false}}
-async function commit(){if(busy||!keyboardContext)return;busy=true;try{const saved=keyboardContext.type==="heading"?await addHeading(draft):await addTask(draft,keyboardContext.headingId);if(saved)closeKeyboard()}finally{busy=false}}
-async function toggleTask(task){try{await updateDoc(itemDocument(task.id),{done:!task.done})}catch(error){console.error(error);status("Could not update task",true)}}
-async function deleteTask(id){try{await deleteDoc(itemDocument(id))}catch(error){console.error(error);status("Could not delete task",true)}}
-async function deleteHeading(id){const hasTasks=items.some(item=>isTask(item)&&item.headingId===id);if(hasTasks){status("Delete this heading's tasks first",true);return}try{await deleteDoc(itemDocument(id))}catch(error){console.error(error);status("Could not delete heading",true)}}
-async function clearDone(){const done=items.filter(item=>isTask(item)&&item.done);if(!done.length)return;try{const batch=writeBatch(db);done.forEach(item=>batch.delete(itemDocument(item.id)));await batch.commit()}catch(error){console.error(error);status("Could not clear completed tasks",true)}}
-function createTaskRow(task){const li=document.createElement("li");li.className=`task${task.done?" done":""}`;const check=document.createElement("button");check.type="button";check.className="check";check.setAttribute("aria-label",task.done?`Mark ${task.text} as not done`:`Mark ${task.text} as done`);check.setAttribute("aria-pressed",String(task.done));check.onclick=()=>toggleTask(task);const text=document.createElement("span");text.className="task-text";text.textContent=task.text;const del=document.createElement("button");del.type="button";del.className="delete";del.textContent="×";del.setAttribute("aria-label",`Delete ${task.text}`);del.onclick=()=>deleteTask(task.id);li.append(check,text,del);return li}
-function createSection(heading,sectionTasks,{general=false}={}){const section=document.createElement("section");section.className="section";const head=document.createElement("div");head.className="section-head";const title=document.createElement("h2");title.className="section-title";title.textContent=heading.text;const actions=document.createElement("div");actions.className="section-actions";const meta=document.createElement("span");meta.className="section-meta";meta.textContent=String(sectionTasks.filter(task=>!task.done).length);meta.setAttribute("aria-label","Open tasks in heading");const add=document.createElement("button");add.type="button";add.className="section-add";add.textContent="+";add.setAttribute("aria-label",`Add task to ${heading.text}`);add.onclick=()=>openKeyboard({type:"task",headingId:general?null:heading.id,title:heading.text,placeholder:"Type a subtask…",maxLength:180});actions.append(meta,add);if(!general){const del=document.createElement("button");del.type="button";del.className="section-delete";del.textContent="×";del.setAttribute("aria-label",`Delete heading ${heading.text}`);del.onclick=()=>deleteHeading(heading.id);actions.append(del)}head.append(title,actions);section.append(head);if(sectionTasks.length){const ul=document.createElement("ul");ul.className="tasks";sectionTasks.forEach(task=>ul.append(createTaskRow(task)));section.append(ul)}else{const p=document.createElement("p");p.className="section-empty";p.textContent="Tap + to add a subtask";section.append(p)}return section}
-function render(){sections.replaceChildren();const headings=items.filter(isHeading),tasks=items.filter(isTask),headingIds=new Set(headings.map(heading=>heading.id));const looseTasks=tasks.filter(task=>!task.headingId||!headingIds.has(task.headingId));if(looseTasks.length)sections.append(createSection({id:"general",text:"General"},looseTasks,{general:true}));for(const heading of headings){const sectionTasks=tasks.filter(task=>task.headingId===heading.id);sections.append(createSection(heading,sectionTasks))}const done=tasks.filter(task=>task.done).length,open=tasks.length-done;openCount.textContent=String(open);const hasSections=headings.length>0||looseTasks.length>0;emptyState.hidden=!loaded||hasSections;taskViewport.classList.toggle("empty-mode",loaded&&!hasSections);clearCompleted.disabled=done===0;progressLabel.textContent=!loaded?"Loading cloud tasks…":tasks.length===0?headings.length?"No tasks yet":"Nothing to do":open===0?"All tasks complete":done===0?`${open} ${open===1?"task":"tasks"} to go`:`${done} of ${tasks.length} complete`}
-function subscribe(){status("Loading cloud tasks…");if(unsubscribe)unsubscribe();unsubscribe=onSnapshot(query(taskCollection(),orderBy("createdAt","asc")),snapshot=>{items=snapshot.docs.map(d=>({id:d.id,...d.data()})).filter(item=>isHeading(item)||isTask(item));loaded=true;render();status("Cloud synced")},error=>{console.error(error);items=[];loaded=false;render();status("Sync blocked — update Firestore rules",true);progressLabel.textContent="Could not load cloud tasks"})}
-touchKeyboard.addEventListener("click",event=>{const k=event.target.closest("button[data-key],button[data-action]");if(!k)return;const a=k.dataset.action;if(a==="shift"){shift=!shift;renderKeyboard()}else if(a==="backspace")backspace();else if(a==="symbols"){mode="symbols";renderKeyboard()}else if(a==="letters"){mode="letters";renderKeyboard()}else if(a==="commit")commit();else if(k.dataset.key!==undefined)insert(k.dataset.key)});
-document.addEventListener("keydown",event=>{if(keyboardOverlay.hidden)return;if(event.key==="Escape")closeKeyboard();else if(event.key==="Enter"){event.preventDefault();commit()}else if(event.key==="Backspace"){event.preventDefault();backspace()}else if(event.key.length===1){event.preventDefault();insert(event.key)}});
-const openHeading=()=>openKeyboard({type:"heading",title:"New heading",placeholder:"Type a heading…",maxLength:80});headingForm.addEventListener("submit",event=>{event.preventDefault();openHeading()});headingInput.addEventListener("click",openHeading);headingInput.addEventListener("focus",()=>headingInput.blur());openHeadingKeyboard.addEventListener("click",openHeading);keyboardClose.addEventListener("click",closeKeyboard);keyboardOverlay.addEventListener("click",event=>{if(event.target===keyboardOverlay)closeKeyboard()});clearCompleted.addEventListener("click",clearDone);render();subscribe();
+const isTask=item=>item&&item.kind!=="heading"&&item.kind!=="sheet"&&item.kind!=="settings"&&typeof item.id==="string"&&typeof item.text==="string"&&typeof item.done==="boolean";
+const itemOrder=item=>Number.isFinite(item?.order)?item.order:(Number.isFinite(item?.createdAt)?item.createdAt:0);
+const byOrder=(a,b)=>itemOrder(a)-itemOrder(b)||(a.createdAt||0)-(b.createdAt||0)||a.id.localeCompare(b.id);
+const sheetForItem=item=>item.sheetId||"sheet-main";
+const sheets=()=>items.filter(isSheet).sort(byOrder);
+const currentItems=()=>items.filter(item=>(isHeading(item)||isTask(item))&&sheetForItem(item)===currentSheetId);
+const currentHeadings=()=>currentItems().filter(isHeading).sort(byOrder);
+const currentTasks=()=>currentItems().filter(isTask);
+const headingTasks=headingId=>currentTasks().filter(task=>(task.headingId||null)===(headingId||null)).sort(byOrder);
+const maxOrder=list=>list.length?Math.max(...list.map(itemOrder)):0;
+
+function status(text,error=false){
+  syncStatus.textContent=text;
+  syncStatus.classList.toggle("error",error);
+}
+
+function key(label,{value=null,action=null,className="",aria=""}={}){
+  const button=document.createElement("button");
+  button.type="button";
+  button.className=`key ${className}`.trim();
+  button.textContent=label;
+  if(value!==null)button.dataset.key=value;
+  if(action)button.dataset.action=action;
+  if(aria)button.setAttribute("aria-label",aria);
+  return button;
+}
+
+function row(keys){
+  const element=document.createElement("div");
+  element.className="key-row";
+  element.append(...keys);
+  touchKeyboard.append(element);
+}
+
+function renderKeyboard(){
+  touchKeyboard.replaceChildren();
+  if(mode==="letters"){
+    row([..."1234567890"].map(value=>key(value,{value})));
+    row([..."qwertyuiop"].map(value=>key(shift?value.toUpperCase():value,{value})));
+    row([..."asdfghjkl"].map(value=>key(shift?value.toUpperCase():value,{value})));
+    const shiftKey=key("⇧",{action:"shift",className:`key-wide key-shift${shift?" active":""}`,aria:"Shift"});
+    shiftKey.setAttribute("aria-pressed",String(shift));
+    row([shiftKey,...[..."zxcvbnm"].map(value=>key(shift?value.toUpperCase():value,{value})),key("⌫",{action:"backspace",className:"key-wide",aria:"Backspace"})]);
+    row([key("#+=",{action:"symbols",className:"key-wide",aria:"Show symbols"}),key(".",{value:"."}),key(",",{value:","}),key("Space",{value:" ",className:"key-space"}),key("-",{value:"-"}),key(keyboardContext?.actionLabel||"Add",{action:"commit",className:"key-action"})]);
+  }else{
+    for(const symbols of [["!","@","#","$","%","^","&","*","(",")"],["-","_","+","=","/","\\",":",";","'",'"'],["[","]","{","}","<",">",",",".","?","`"]]){
+      row(symbols.map(value=>key(value,{value})));
+    }
+    row([key("ABC",{action:"letters",className:"key-wide",aria:"Show letters"}),key("Space",{value:" ",className:"key-space"}),key("⌫",{action:"backspace",className:"key-wide",aria:"Backspace"}),key(keyboardContext?.actionLabel||"Add",{action:"commit",className:"key-action"})]);
+  }
+}
+
+function renderDraft(){
+  draftDisplay.replaceChildren();
+  const empty=!draft;
+  draftDisplay.classList.toggle("draft-empty",empty);
+  draftDisplay.append(document.createTextNode(empty?(keyboardContext?.placeholder||"Type here…"):draft));
+  const caret=document.createElement("span");
+  caret.className="caret";
+  caret.setAttribute("aria-hidden","true");
+  draftDisplay.append(caret);
+}
+
+function openKeyboard(context){
+  keyboardContext=context;
+  draft="";
+  shift=true;
+  mode="letters";
+  busy=false;
+  keyboardTitle.textContent=context.title;
+  keyboardHint.textContent=`Touch the keys to type · ${context.maxLength} characters maximum`;
+  renderDraft();
+  renderKeyboard();
+  keyboardOverlay.hidden=false;
+  document.body.classList.add("keyboard-open");
+}
+
+function closeKeyboard(){
+  keyboardOverlay.hidden=true;
+  document.body.classList.remove("keyboard-open");
+  draft="";
+  busy=false;
+  keyboardContext=null;
+  touchKeyboard.replaceChildren();
+}
+
+function insert(value){
+  const max=keyboardContext?.maxLength||180;
+  if([...draft].length>=max)return;
+  draft+=/^[a-z]$/i.test(value)?(shift?value.toUpperCase():value.toLowerCase()):value;
+  renderDraft();
+  if(/^[a-z]$/i.test(value)&&shift){
+    shift=false;
+    renderKeyboard();
+  }
+}
+
+function backspace(){
+  if(!draft)return;
+  draft=[...draft].slice(0,-1).join("");
+  renderDraft();
+}
+
+async function bootstrapFirstSheet(rawItems){
+  if(bootstrapping||rawItems.some(isSheet))return false;
+  bootstrapping=true;
+  status("Preparing first task sheet…");
+  try{
+    const batch=writeBatch(db);
+    const now=Date.now();
+    batch.set(itemDocument("sheet-main"),{kind:"sheet",text:"Task sheet 1",order:0,createdAt:now});
+    const legacyHeadings=rawItems.filter(isHeading).sort(byOrder);
+    legacyHeadings.forEach((heading,index)=>batch.update(itemDocument(heading.id),{sheetId:"sheet-main",order:index*1000}));
+    const legacyTasks=rawItems.filter(isTask);
+    const headingIds=new Set(legacyHeadings.map(heading=>heading.id));
+    const groups=new Map();
+    for(const task of legacyTasks){
+      const headingId=task.headingId&&headingIds.has(task.headingId)?task.headingId:null;
+      const groupKey=headingId||"__general";
+      if(!groups.has(groupKey))groups.set(groupKey,[]);
+      groups.get(groupKey).push(task);
+    }
+    for(const [groupKey,groupTasks] of groups){
+      groupTasks.sort(byOrder).forEach((task,index)=>batch.update(itemDocument(task.id),{
+        kind:"task",
+        sheetId:"sheet-main",
+        headingId:groupKey==="__general"?null:groupKey,
+        order:index*1000
+      }));
+    }
+    batch.set(settingsDocument(),{kind:"settings",activeSheetId:"sheet-main",createdAt:0,updatedAt:now});
+    await batch.commit();
+    return true;
+  }catch(error){
+    console.error("Could not create first sheet:",error);
+    status("Could not prepare task sheets",true);
+    return false;
+  }finally{
+    bootstrapping=false;
+  }
+}
+
+function syncCurrentSheet(){
+  const list=sheets();
+  if(!list.length){
+    currentSheetId=null;
+    return;
+  }
+  if(currentSheetId&&list.some(sheet=>sheet.id===currentSheetId))return;
+  const settings=items.find(isSettings);
+  currentSheetId=list.some(sheet=>sheet.id===settings?.activeSheetId)?settings.activeSheetId:list[0].id;
+}
+
+async function rememberSheet(sheetId){
+  try{
+    await setDoc(settingsDocument(),{kind:"settings",activeSheetId:sheetId,createdAt:0,updatedAt:Date.now()},{merge:true});
+  }catch(error){
+    console.error("Could not remember sheet:",error);
+    status("Sheet opened, but could not remember it",true);
+  }
+}
+
+async function selectSheet(sheetId){
+  if(sheetId===currentSheetId)return;
+  deleteSheetArmedUntil=0;
+  currentSheetId=sheetId;
+  taskViewport.scrollTop=0;
+  render();
+  await rememberSheet(sheetId);
+}
+
+async function addSheet(text){
+  const clean=text.trim();
+  if(!clean)return false;
+  const id=`sheet-${makeId()}`;
+  const order=maxOrder(sheets())+1000;
+  const now=Date.now();
+  const batch=writeBatch(db);
+  batch.set(itemDocument(id),{kind:"sheet",text:clean,order,createdAt:now});
+  batch.set(settingsDocument(),{kind:"settings",activeSheetId:id,createdAt:0,updatedAt:now},{merge:true});
+  currentSheetId=id;
+  status("Creating task sheet…");
+  try{
+    await batch.commit();
+    return true;
+  }catch(error){
+    console.error("Could not create sheet:",error);
+    status("Could not create task sheet",true);
+    return false;
+  }
+}
+
+async function deleteCurrentSheet(){
+  const list=sheets();
+  if(list.length<=1){
+    status("Keep at least one task sheet",true);
+    return;
+  }
+  const active=list.find(sheet=>sheet.id===currentSheetId);
+  if(!active)return;
+  const now=Date.now();
+  if(deleteSheetArmedUntil<now){
+    deleteSheetArmedUntil=now+3500;
+    status(`Tap × again to delete ${active.text}`,true);
+    return;
+  }
+  deleteSheetArmedUntil=0;
+  const activeIndex=list.findIndex(sheet=>sheet.id===currentSheetId);
+  const nextSheet=list[activeIndex+1]||list[activeIndex-1];
+  const doomed=items.filter(item=>item.id===currentSheetId||((isHeading(item)||isTask(item))&&sheetForItem(item)===currentSheetId));
+  const batch=writeBatch(db);
+  doomed.forEach(item=>batch.delete(itemDocument(item.id)));
+  batch.set(settingsDocument(),{kind:"settings",activeSheetId:nextSheet.id,createdAt:0,updatedAt:Date.now()},{merge:true});
+  currentSheetId=nextSheet.id;
+  status(`Deleting ${active.text}…`);
+  try{
+    await batch.commit();
+  }catch(error){
+    console.error("Could not delete sheet:",error);
+    status("Could not delete task sheet",true);
+  }
+}
+
+async function addHeading(text){
+  const clean=text.trim();
+  if(!clean||!currentSheetId)return false;
+  status("Saving heading…");
+  try{
+    await setDoc(itemDocument(makeId()),{
+      kind:"heading",
+      sheetId:currentSheetId,
+      text:clean,
+      order:maxOrder(currentHeadings())+1000,
+      createdAt:Date.now()
+    });
+    return true;
+  }catch(error){
+    console.error(error);
+    status("Could not save heading",true);
+    return false;
+  }
+}
+
+async function addTask(text,headingId=null){
+  const clean=text.trim();
+  if(!clean||!currentSheetId)return false;
+  status("Saving task…");
+  try{
+    await setDoc(itemDocument(makeId()),{
+      kind:"task",
+      sheetId:currentSheetId,
+      headingId,
+      text:clean,
+      done:false,
+      order:maxOrder(headingTasks(headingId))+1000,
+      createdAt:Date.now()
+    });
+    return true;
+  }catch(error){
+    console.error(error);
+    status("Could not save task",true);
+    return false;
+  }
+}
+
+async function commit(){
+  if(busy||!keyboardContext)return;
+  busy=true;
+  try{
+    let saved=false;
+    if(keyboardContext.type==="sheet")saved=await addSheet(draft);
+    else if(keyboardContext.type==="heading")saved=await addHeading(draft);
+    else saved=await addTask(draft,keyboardContext.headingId);
+    if(saved)closeKeyboard();
+  }finally{
+    busy=false;
+  }
+}
+
+async function toggleTask(task){
+  try{
+    await updateDoc(itemDocument(task.id),{done:!task.done});
+  }catch(error){
+    console.error(error);
+    status("Could not update task",true);
+  }
+}
+
+async function deleteTask(id){
+  try{
+    await deleteDoc(itemDocument(id));
+  }catch(error){
+    console.error(error);
+    status("Could not delete task",true);
+  }
+}
+
+async function deleteHeading(id){
+  const hasTasks=currentTasks().some(item=>item.headingId===id);
+  if(hasTasks){
+    status("Delete this heading's tasks first",true);
+    return;
+  }
+  try{
+    await deleteDoc(itemDocument(id));
+  }catch(error){
+    console.error(error);
+    status("Could not delete heading",true);
+  }
+}
+
+async function clearDone(){
+  const done=currentTasks().filter(item=>item.done);
+  if(!done.length)return;
+  try{
+    const batch=writeBatch(db);
+    done.forEach(item=>batch.delete(itemDocument(item.id)));
+    await batch.commit();
+  }catch(error){
+    console.error(error);
+    status("Could not clear completed tasks",true);
+  }
+}
+
+function cancelPendingDrag(){
+  if(!dragState)return;
+  clearTimeout(dragState.timer);
+  if(dragState.dragging){
+    dragState.row.classList.remove("dragging");
+    document.body.classList.remove("task-dragging");
+    try{
+      if(dragState.row.hasPointerCapture(dragState.pointerId))dragState.row.releasePointerCapture(dragState.pointerId);
+    }catch{}
+  }
+  dragState=null;
+}
+
+function beginTaskDrag(){
+  if(!dragState)return;
+  dragState.dragging=true;
+  dragState.row.classList.add("dragging");
+  document.body.classList.add("task-dragging");
+  try{dragState.row.setPointerCapture(dragState.pointerId)}catch{}
+  status("Drag to reorder · release to save");
+}
+
+function onTaskPointerDown(event,task,rowElement){
+  if(reorderBusy||dragState||event.target.closest("button"))return;
+  if(event.pointerType==="mouse"&&event.button!==0)return;
+  dragState={
+    task,
+    row:rowElement,
+    parent:rowElement.parentElement,
+    pointerId:event.pointerId,
+    startX:event.clientX,
+    startY:event.clientY,
+    dragging:false,
+    timer:setTimeout(beginTaskDrag,430)
+  };
+}
+
+function onTaskPointerMove(event){
+  if(!dragState||dragState.pointerId!==event.pointerId||dragState.row!==event.currentTarget)return;
+  if(!dragState.dragging){
+    if(Math.hypot(event.clientX-dragState.startX,event.clientY-dragState.startY)>10)cancelPendingDrag();
+    return;
+  }
+  event.preventDefault();
+  const target=document.elementFromPoint(event.clientX,event.clientY)?.closest(".task");
+  if(target&&target!==dragState.row&&target.parentElement===dragState.parent){
+    const rect=target.getBoundingClientRect();
+    dragState.parent.insertBefore(dragState.row,event.clientY<rect.top+rect.height/2?target:target.nextSibling);
+  }
+  const viewportRect=taskViewport.getBoundingClientRect();
+  if(event.clientY<viewportRect.top+38)taskViewport.scrollTop-=12;
+  else if(event.clientY>viewportRect.bottom-38)taskViewport.scrollTop+=12;
+}
+
+async function saveDraggedOrder(rowElement,parentElement,pointerId){
+  const orderedIds=[...parentElement.querySelectorAll(".task")].map(row=>row.dataset.taskId).filter(Boolean);
+  rowElement.classList.remove("dragging");
+  document.body.classList.remove("task-dragging");
+  try{if(rowElement.hasPointerCapture(pointerId))rowElement.releasePointerCapture(pointerId)}catch{}
+  dragState=null;
+  reorderBusy=true;
+  const batch=writeBatch(db);
+  orderedIds.forEach((id,index)=>{
+    const item=items.find(candidate=>candidate.id===id);
+    if(item)item.order=index*1000;
+    batch.update(itemDocument(id),{order:index*1000});
+  });
+  render();
+  try{
+    await batch.commit();
+    status("Task order saved");
+  }catch(error){
+    console.error("Could not save task order:",error);
+    status("Could not save task order",true);
+  }finally{
+    reorderBusy=false;
+    render();
+  }
+}
+
+function onTaskPointerEnd(event){
+  if(!dragState||dragState.pointerId!==event.pointerId||dragState.row!==event.currentTarget)return;
+  clearTimeout(dragState.timer);
+  if(!dragState.dragging){
+    dragState=null;
+    return;
+  }
+  const {row,parent,pointerId}=dragState;
+  saveDraggedOrder(row,parent,pointerId);
+}
+
+function createTaskRow(task){
+  const li=document.createElement("li");
+  li.className=`task${task.done?" done":""}`;
+  li.dataset.taskId=task.id;
+  li.setAttribute("aria-label",`${task.text}. Hold and drag to reorder.`);
+  const check=document.createElement("button");
+  check.type="button";
+  check.className="check";
+  check.setAttribute("aria-label",task.done?`Mark ${task.text} as not done`:`Mark ${task.text} as done`);
+  check.setAttribute("aria-pressed",String(task.done));
+  check.onclick=()=>toggleTask(task);
+  const text=document.createElement("span");
+  text.className="task-text";
+  text.textContent=task.text;
+  const del=document.createElement("button");
+  del.type="button";
+  del.className="delete";
+  del.textContent="×";
+  del.setAttribute("aria-label",`Delete ${task.text}`);
+  del.onclick=()=>deleteTask(task.id);
+  li.append(check,text,del);
+  li.addEventListener("pointerdown",event=>onTaskPointerDown(event,task,li));
+  li.addEventListener("pointermove",onTaskPointerMove);
+  li.addEventListener("pointerup",onTaskPointerEnd);
+  li.addEventListener("pointercancel",event=>{
+    if(dragState?.pointerId===event.pointerId&&dragState.row===li)cancelPendingDrag();
+  });
+  return li;
+}
+
+function createSection(heading,sectionTasks,{general=false}={}){
+  const section=document.createElement("section");
+  section.className="section";
+  const head=document.createElement("div");
+  head.className="section-head";
+  const title=document.createElement("h2");
+  title.className="section-title";
+  title.textContent=heading.text;
+  const actions=document.createElement("div");
+  actions.className="section-actions";
+  const meta=document.createElement("span");
+  meta.className="section-meta";
+  meta.textContent=String(sectionTasks.filter(task=>!task.done).length);
+  meta.setAttribute("aria-label","Open tasks in heading");
+  const add=document.createElement("button");
+  add.type="button";
+  add.className="section-add";
+  add.textContent="+";
+  add.setAttribute("aria-label",`Add task to ${heading.text}`);
+  add.onclick=()=>openKeyboard({type:"task",headingId:general?null:heading.id,title:heading.text,placeholder:"Type a subtask…",maxLength:180,actionLabel:"Add"});
+  actions.append(meta,add);
+  if(!general){
+    const del=document.createElement("button");
+    del.type="button";
+    del.className="section-delete";
+    del.textContent="×";
+    del.setAttribute("aria-label",`Delete heading ${heading.text}`);
+    del.onclick=()=>deleteHeading(heading.id);
+    actions.append(del);
+  }
+  head.append(title,actions);
+  section.append(head);
+  if(sectionTasks.length){
+    const ul=document.createElement("ul");
+    ul.className="tasks";
+    ul.dataset.headingId=general?"":heading.id;
+    sectionTasks.sort(byOrder).forEach(task=>ul.append(createTaskRow(task)));
+    section.append(ul);
+  }else{
+    const p=document.createElement("p");
+    p.className="section-empty";
+    p.textContent="Tap + to add a subtask";
+    section.append(p);
+  }
+  return section;
+}
+
+function renderSheets(){
+  sheetTabs.replaceChildren();
+  const list=sheets();
+  for(const sheet of list){
+    const button=document.createElement("button");
+    button.type="button";
+    button.className=`sheet-tab${sheet.id===currentSheetId?" active":""}`;
+    button.textContent=sheet.text;
+    button.title=sheet.text;
+    button.setAttribute("aria-pressed",String(sheet.id===currentSheetId));
+    button.onclick=()=>selectSheet(sheet.id);
+    sheetTabs.append(button);
+    if(sheet.id===currentSheetId)requestAnimationFrame(()=>button.scrollIntoView({block:"nearest",inline:"nearest"}));
+  }
+  deleteSheetButton.disabled=list.length<=1;
+}
+
+function render(){
+  renderSheets();
+  sections.replaceChildren();
+  const headings=currentHeadings();
+  const tasks=currentTasks();
+  const headingIds=new Set(headings.map(heading=>heading.id));
+  const looseTasks=tasks.filter(task=>!task.headingId||!headingIds.has(task.headingId)).sort(byOrder);
+  if(looseTasks.length)sections.append(createSection({id:"general",text:"General"},looseTasks,{general:true}));
+  for(const heading of headings){
+    sections.append(createSection(heading,tasks.filter(task=>task.headingId===heading.id).sort(byOrder)));
+  }
+  const done=tasks.filter(task=>task.done).length;
+  const open=tasks.length-done;
+  openCount.textContent=String(open);
+  const hasSections=headings.length>0||looseTasks.length>0;
+  emptyState.hidden=!loaded||!currentSheetId||hasSections;
+  taskViewport.classList.toggle("empty-mode",loaded&&!!currentSheetId&&!hasSections);
+  clearCompleted.disabled=done===0;
+  headingInput.disabled=!currentSheetId;
+  openHeadingKeyboard.disabled=!currentSheetId;
+  progressLabel.textContent=!loaded?"Loading cloud tasks…":!currentSheetId?"Loading task sheets…":tasks.length===0?(headings.length?"No tasks yet":"Nothing to do"):open===0?"All tasks complete":done===0?`${open} ${open===1?"task":"tasks"} to go`:`${done} of ${tasks.length} complete`;
+}
+
+function subscribe(){
+  status("Loading cloud tasks…");
+  if(unsubscribe)unsubscribe();
+  unsubscribe=onSnapshot(taskCollection(),async snapshot=>{
+    items=snapshot.docs.map(snapshotDoc=>({id:snapshotDoc.id,...snapshotDoc.data()}));
+    loaded=true;
+    if(!items.some(isSheet)){
+      const started=await bootstrapFirstSheet(items);
+      if(started)return;
+    }
+    syncCurrentSheet();
+    if(!reorderBusy)render();
+    status("Cloud synced");
+  },error=>{
+    console.error(error);
+    items=[];
+    loaded=false;
+    currentSheetId=null;
+    render();
+    status("Sync blocked — update Firestore rules",true);
+    progressLabel.textContent="Could not load cloud tasks";
+  });
+}
+
+touchKeyboard.addEventListener("click",event=>{
+  const selectedKey=event.target.closest("button[data-key],button[data-action]");
+  if(!selectedKey)return;
+  const action=selectedKey.dataset.action;
+  if(action==="shift"){shift=!shift;renderKeyboard()}
+  else if(action==="backspace")backspace();
+  else if(action==="symbols"){mode="symbols";renderKeyboard()}
+  else if(action==="letters"){mode="letters";renderKeyboard()}
+  else if(action==="commit")commit();
+  else if(selectedKey.dataset.key!==undefined)insert(selectedKey.dataset.key);
+});
+
+document.addEventListener("keydown",event=>{
+  if(keyboardOverlay.hidden)return;
+  if(event.key==="Escape")closeKeyboard();
+  else if(event.key==="Enter"){event.preventDefault();commit()}
+  else if(event.key==="Backspace"){event.preventDefault();backspace()}
+  else if(event.key.length===1){event.preventDefault();insert(event.key)}
+});
+
+const openHeading=()=>openKeyboard({type:"heading",title:"New heading",placeholder:"Type a heading…",maxLength:80,actionLabel:"Add"});
+const openSheet=()=>openKeyboard({type:"sheet",title:"New task sheet",placeholder:"Name this sheet…",maxLength:40,actionLabel:"Create"});
+
+headingForm.addEventListener("submit",event=>{event.preventDefault();openHeading()});
+headingInput.addEventListener("click",openHeading);
+headingInput.addEventListener("focus",()=>headingInput.blur());
+openHeadingKeyboard.addEventListener("click",openHeading);
+addSheetButton.addEventListener("click",openSheet);
+deleteSheetButton.addEventListener("click",deleteCurrentSheet);
+keyboardClose.addEventListener("click",closeKeyboard);
+keyboardOverlay.addEventListener("click",event=>{if(event.target===keyboardOverlay)closeKeyboard()});
+clearCompleted.addEventListener("click",clearDone);
+
+render();
+subscribe();
 </script>
 </body>
 </html>
