@@ -1,0 +1,224 @@
+--- a/index.html
++++ b/index.html
+@@ -13,7 +13,7 @@
+ button,input{font:inherit}button{border:0;color:inherit;cursor:pointer;touch-action:manipulation}
+ .app{width:min(100%,760px);height:100dvh;margin:0 auto;padding:clamp(9px,1.4vh,18px) clamp(10px,2.2vw,22px) 9px;display:flex;flex-direction:column;gap:7px;overflow:hidden}
+ .eyebrow{align-self:center;margin:0;padding:0;background:transparent;color:var(--accent);font-size:clamp(10px,1.7vw,13px);font-weight:850;letter-spacing:.13em;text-transform:uppercase;text-align:center;flex:0 0 auto}
+-.sheetbar{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:4px;min-width:0;margin-left:5px;padding-left:12px}.sheetbar::before{content:"";position:absolute;left:2px;top:50%;width:1px;height:26px;transform:translateY(-50%);border-radius:999px;background:rgba(255,255,255,.16)}
++.sheetbar{position:relative;align-self:stretch;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:4px;min-width:0;margin-left:5px;padding-left:12px}.sheetbar::before{content:"";position:absolute;left:2px;top:0;bottom:0;width:1px;border-radius:999px;background:rgba(255,255,255,.16)}
+ .sheet-tabs{display:flex;align-items:center;gap:5px;min-width:0;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
+ .sheet-tabs::-webkit-scrollbar{display:none}
+ .sheet-tab{flex:0 0 auto;max-width:150px;height:32px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.045);color:var(--muted);font-size:clamp(10px,1.8vw,13px);font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;user-select:none;-webkit-user-select:none}
+@@ -88,7 +88,7 @@
+ .recent-row{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px;margin-top:14px;color:var(--muted);font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:.08em}.recent-colors{display:flex;gap:8px;min-height:38px}.recent-color{width:38px;height:38px;border:2px solid rgba(255,255,255,.34);border-radius:12px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.22)}.recent-empty{align-self:center;color:#646c79;font-size:11px;text-transform:none;letter-spacing:0}
+ .theme-actions{display:grid;grid-template-columns:1fr 1.35fr;gap:9px;margin-top:16px}.theme-action{height:48px;border-radius:14px;background:rgba(255,255,255,.06);font-weight:800}.theme-action.save{background:var(--accent);color:#fff}
+ 
+-@media(max-width:430px){.app{padding-inline:8px}.header{gap:5px}h1{font-size:28px}.sheetbar{margin-left:2px;padding-left:9px}.sheetbar::before{left:1px;height:24px}.sheet-tab{max-width:112px;padding-inline:8px}.keyboard-overlay{padding:8px}.keyboard-panel{padding:16px 12px 18px;border-radius:24px}.key{height:58px}.section-head{padding-left:9px}.tasks{padding:4px}.task{padding-left:7px}}
++@media(max-width:430px){.app{padding-inline:8px}.header{gap:5px}h1{font-size:28px}.sheetbar{margin-left:2px;padding-left:9px}.sheetbar::before{left:1px}.sheet-tab{max-width:112px;padding-inline:8px}.keyboard-overlay{padding:8px}.keyboard-panel{padding:16px 12px 18px;border-radius:24px}.key{height:58px}.section-head{padding-left:9px}.tasks{padding:4px}.task{padding-left:7px}}
+ @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+ </style>
+ </head>
+@@ -673,13 +673,6 @@
+   document.body.classList.remove("task-dragging");
+ }
+ 
+-function releaseTaskPointer(state){
+-  if(!state)return;
+-  try{
+-    if(state.row.hasPointerCapture(state.pointerId))state.row.releasePointerCapture(state.pointerId);
+-  }catch{}
+-}
+-
+ function cancelPendingDrag(){
+   if(!dragState)return;
+   const state=dragState;
+@@ -688,7 +681,6 @@
+     state.row.classList.remove("dragging");
+     unlockTaskDragScroll();
+   }
+-  releaseTaskPointer(state);
+   dragState=null;
+ }
+ 
+@@ -702,33 +694,29 @@
+   status("Drag to reorder · release to save");
+ }
+ 
+-function onTaskPointerDown(event,task,rowElement){
+-  if(reorderBusy||dragState||event.target.closest("button"))return;
+-  if(event.pointerType==="mouse"&&event.button!==0)return;
+-  event.preventDefault();
++function startTaskGesture(task,rowElement,{inputType,inputId,clientX,clientY}){
++  if(reorderBusy||dragState)return false;
+   dragState={
+     task,
+     row:rowElement,
+     parent:rowElement.parentElement,
+-    pointerId:event.pointerId,
+-    startX:event.clientX,
+-    startY:event.clientY,
++    inputType,
++    inputId,
++    startX:clientX,
++    startY:clientY,
+     startScrollTop:taskViewport.scrollTop,
+     scrolling:false,
+     dragging:false,
+     previousOverflowY:"",
+     timer:setTimeout(beginTaskDrag,430)
+   };
+-  try{rowElement.setPointerCapture(event.pointerId)}catch{}
+-}
+-
+-function onTaskPointerMove(event){
+-  if(!dragState||dragState.pointerId!==event.pointerId||dragState.row!==event.currentTarget)return;
+-  event.preventDefault();
+-  event.stopPropagation();
+-
+-  const dx=event.clientX-dragState.startX;
+-  const dy=event.clientY-dragState.startY;
++  return true;
++}
++
++function moveTaskGesture(clientX,clientY){
++  if(!dragState)return;
++  const dx=clientX-dragState.startX;
++  const dy=clientY-dragState.startY;
+ 
+   if(!dragState.dragging){
+     if(!dragState.scrolling&&Math.hypot(dx,dy)>10){
+@@ -744,22 +732,20 @@
+   const siblings=[...dragState.parent.querySelectorAll(".task")].filter(row=>row!==dragState.row);
+   const before=siblings.find(row=>{
+     const rect=row.getBoundingClientRect();
+-    return event.clientY<rect.top+rect.height/2;
++    return clientY<rect.top+rect.height/2;
+   });
+   if(before)dragState.parent.insertBefore(dragState.row,before);
+   else dragState.parent.append(dragState.row);
+ 
+   const viewportRect=taskViewport.getBoundingClientRect();
+-  if(event.clientY<viewportRect.top+38)taskViewport.scrollTop-=12;
+-  else if(event.clientY>viewportRect.bottom-38)taskViewport.scrollTop+=12;
+-}
+-
+-async function saveDraggedOrder(rowElement,parentElement,pointerId){
++  if(clientY<viewportRect.top+38)taskViewport.scrollTop-=12;
++  else if(clientY>viewportRect.bottom-38)taskViewport.scrollTop+=12;
++}
++
++async function saveDraggedOrder(rowElement,parentElement){
+   const orderedIds=[...parentElement.querySelectorAll(".task")].map(row=>row.dataset.taskId).filter(Boolean);
+   rowElement.classList.remove("dragging");
+   unlockTaskDragScroll();
+-  const state=dragState;
+-  releaseTaskPointer(state||{row:rowElement,pointerId});
+   dragState=null;
+   reorderBusy=true;
+   const batch=writeBatch(db);
+@@ -781,19 +767,70 @@
+   }
+ }
+ 
+-function onTaskPointerEnd(event){
+-  if(!dragState||dragState.pointerId!==event.pointerId||dragState.row!==event.currentTarget)return;
++function finishTaskGesture(){
++  if(!dragState)return;
+   clearTimeout(dragState.timer);
+   if(!dragState.dragging){
+-    const state=dragState;
+-    releaseTaskPointer(state);
+     dragState=null;
+     return;
+   }
+-  const {row,parent,pointerId}=dragState;
+-  saveDraggedOrder(row,parent,pointerId);
+-}
+-
++  const {row,parent}=dragState;
++  saveDraggedOrder(row,parent);
++}
++
++function findTrackedTouch(touchList){
++  if(!dragState||dragState.inputType!=="touch")return null;
++  return [...touchList].find(touch=>touch.identifier===dragState.inputId)||null;
++}
++
++function onTaskTouchStart(event,task,rowElement){
++  if(event.target.closest("button")||event.touches.length!==1)return;
++  const touch=event.changedTouches[0];
++  if(!touch)return;
++  if(startTaskGesture(task,rowElement,{inputType:"touch",inputId:touch.identifier,clientX:touch.clientX,clientY:touch.clientY})){
++    event.preventDefault();
++  }
++}
++
++function onTaskMouseDown(event,task,rowElement){
++  if(event.button!==0||event.target.closest("button"))return;
++  if(startTaskGesture(task,rowElement,{inputType:"mouse",inputId:0,clientX:event.clientX,clientY:event.clientY})){
++    event.preventDefault();
++  }
++}
++
++function onDocumentTouchMove(event){
++  const touch=findTrackedTouch(event.touches);
++  if(!touch)return;
++  event.preventDefault();
++  event.stopPropagation();
++  moveTaskGesture(touch.clientX,touch.clientY);
++}
++
++function onDocumentTouchEnd(event){
++  if(!dragState||dragState.inputType!=="touch")return;
++  const touch=[...event.changedTouches].find(candidate=>candidate.identifier===dragState.inputId);
++  if(!touch)return;
++  event.preventDefault();
++  finishTaskGesture();
++}
++
++function onDocumentTouchCancel(event){
++  if(!dragState||dragState.inputType!=="touch")return;
++  const touch=[...event.changedTouches].find(candidate=>candidate.identifier===dragState.inputId);
++  if(touch)cancelPendingDrag();
++}
++
++function onDocumentMouseMove(event){
++  if(!dragState||dragState.inputType!=="mouse")return;
++  event.preventDefault();
++  moveTaskGesture(event.clientX,event.clientY);
++}
++
++function onDocumentMouseUp(event){
++  if(!dragState||dragState.inputType!=="mouse"||event.button!==0)return;
++  finishTaskGesture();
++}
+ 
+ function bindLongPress(element,callback,{delay=520}={}){
+   let state=null;
+@@ -852,12 +889,8 @@
+   del.setAttribute("aria-label",`Delete ${task.text}`);
+   del.onclick=()=>deleteTask(task.id);
+   li.append(check,text,del);
+-  li.addEventListener("pointerdown",event=>onTaskPointerDown(event,task,li));
+-  li.addEventListener("pointermove",onTaskPointerMove);
+-  li.addEventListener("pointerup",onTaskPointerEnd);
+-  li.addEventListener("pointercancel",event=>{
+-    if(dragState?.pointerId===event.pointerId&&dragState.row===li)cancelPendingDrag();
+-  });
++  li.addEventListener("touchstart",event=>onTaskTouchStart(event,task,li),{passive:false});
++  li.addEventListener("mousedown",event=>onTaskMouseDown(event,task,li));
+   return li;
+ }
+ 
+@@ -1012,6 +1045,11 @@
+ keyboardOverlay.addEventListener("click",event=>{if(event.target===keyboardOverlay)closeKeyboard()});
+ clearCompleted.addEventListener("click",clearDone);
+ 
++document.addEventListener("touchmove",onDocumentTouchMove,{passive:false,capture:true});
++document.addEventListener("touchend",onDocumentTouchEnd,{passive:false,capture:true});
++document.addEventListener("touchcancel",onDocumentTouchCancel,{passive:false,capture:true});
++document.addEventListener("mousemove",onDocumentMouseMove,{capture:true});
++document.addEventListener("mouseup",onDocumentMouseUp,{capture:true});
+ 
+ themeButton.addEventListener("click",openThemePicker);
+ themeClose.addEventListener("click",()=>closeThemePicker());
