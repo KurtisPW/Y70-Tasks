@@ -3,6 +3,8 @@ name: Add iOS native keyboard
 on:
   issues:
     types: [opened, edited]
+  pull_request:
+    types: [opened]
   workflow_dispatch:
 
 permissions:
@@ -11,11 +13,12 @@ permissions:
 
 jobs:
   patch:
-    if: github.event_name == 'workflow_dispatch' || github.event.issue.title == '[automation] Apply iOS native keyboard'
+    if: github.event_name == 'workflow_dispatch' || github.event.issue.title == '[automation] Apply iOS native keyboard' || github.event.pull_request.title == '[automation] Apply iOS native keyboard'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
       - name: Patch app
         run: |
@@ -142,7 +145,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
           git commit -m "Use native iOS keyboard for text entry"
-          git push
+          git push origin main
       - name: Close trigger issue
         if: github.event_name == 'issues'
         env:
