@@ -2,7 +2,7 @@ name: Add iOS native keyboard
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
   workflow_dispatch:
 
 permissions:
