@@ -1,0 +1,49 @@
+name: Trigger keyboard and heading patch
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  patch:
+    if: github.event_name == 'workflow_dispatch' || github.event.issue.title == '[automation] Apply keyboard and heading reorder'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract and run validated patch
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          workflow = Path('.github/workflows/add-hardware-keyboard-heading-reorder.yml')
+          lines = workflow.read_text().splitlines()
+          start = next(i for i, line in enumerate(lines) if "python - <<'PY'" in line) + 1
+          end = next(i for i in range(start, len(lines)) if lines[i].strip() == 'PY')
+          code = '\n'.join(line[10:] if line.startswith('          ') else line for line in lines[start:end]) + '\n'
+          Path('/tmp/apply-y70-patch.py').write_text(code)
+          PY
+          python /tmp/apply-y70-patch.py
+          node --check /tmp/y70-app.mjs
+
+      - name: Commit app update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Support hardware caps and reorder headings"
+          git push
+
+      - name: Close trigger issue
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue close "${{ github.event.issue.number }}" --comment "Applied the keyboard and heading reorder update."
