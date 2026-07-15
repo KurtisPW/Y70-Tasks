@@ -1,0 +1,150 @@
+name: Add iOS native keyboard
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  patch:
+    if: github.event_name == 'workflow_dispatch' || github.event.issue.title == '[automation] Apply iOS native keyboard'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch app
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p=Path('index.html')
+          s=p.read_text()
+          def rep(old,new,label):
+              global s
+              if s.count(old)!=1:
+                  raise SystemExit(f'{label}: expected 1, got {s.count(old)}')
+              s=s.replace(old,new,1)
+
+          rep(
+          '.draft.draft-empty{color:#6e7684}',
+          '.draft.draft-empty{color:#6e7684}.native-input{display:none;width:100%;min-height:clamp(150px,28vw,230px);margin-bottom:14px;padding:18px 20px;resize:none;border:1px solid var(--accent-line);border-radius:22px;outline:0;background:#0a0d12;color:var(--text);font:inherit;font-size:clamp(20px,4vw,30px);font-weight:650;line-height:1.3;caret-color:var(--accent);-webkit-appearance:none}.native-actions{display:none;grid-template-columns:1fr 1.35fr;gap:9px}.native-action{height:52px;border-radius:14px;background:rgba(255,255,255,.06);font-weight:800}.native-action.save{background:var(--accent);color:#fff}.keyboard-panel.native-mode .draft,.keyboard-panel.native-mode .keyboard,.keyboard-panel.native-mode .keyboard-hint{display:none}.keyboard-panel.native-mode .native-input{display:block}.keyboard-panel.native-mode .native-actions{display:grid}.keyboard-overlay.native-mode{align-items:flex-start;padding-top:max(12px,env(safe-area-inset-top))}.keyboard-panel.native-mode{max-height:calc(100dvh - max(24px,env(safe-area-inset-top)));overflow-y:auto}',
+          'native input styles')
+
+          rep(
+          '    <div class="draft draft-empty" id="draftDisplay" role="textbox" aria-label="Typed text" aria-live="polite"></div>\n    <div class="keyboard" id="touchKeyboard" aria-label="Touch keyboard"></div>',
+          '    <div class="draft draft-empty" id="draftDisplay" role="textbox" aria-label="Typed text" aria-live="polite"></div>\n    <textarea class="native-input" id="nativeInput" rows="4" autocomplete="off" autocapitalize="sentences" spellcheck="true" aria-label="Type text"></textarea>\n    <div class="native-actions" id="nativeActions"><button class="native-action" id="nativeCancel" type="button">Cancel</button><button class="native-action save" id="nativeSave" type="button">Add</button></div>\n    <div class="keyboard" id="touchKeyboard" aria-label="Touch keyboard"></div>',
+          'native input markup')
+
+          rep(
+          'const themeButton=$("themeButton"),sheetTabs=$("sheetTabs"),addSheetButton=$("addSheetButton"),deleteSheetButton=$("deleteSheetButton"),headingForm=$("headingForm"),headingInput=$("headingInput"),openHeadingKeyboard=$("openHeadingKeyboard"),keyboardOverlay=$("keyboardOverlay"),keyboardClose=$("keyboardClose"),touchKeyboard=$("touchKeyboard"),draftDisplay=$("draftDisplay"),keyboardTitle=$("keyboardTitle"),keyboardHint=$("keyboardHint"),sections=$("sections"),taskViewport=$("taskViewport"),emptyState=$("emptyState"),openCount=$("openCount"),progressLabel=$("progressLabel"),clearCompleted=$("clearCompleted"),syncStatus=$("syncStatus"),themeOverlay=$("themeOverlay"),themeClose=$("themeClose"),colorArea=$("colorArea"),colorCursor=$("colorCursor"),hueSlider=$("hueSlider"),colorPreview=$("colorPreview"),hexValue=$("hexValue"),recentColorsElement=$("recentColors"),themeCancel=$("themeCancel"),themeSave=$("themeSave");',
+          'const themeButton=$("themeButton"),sheetTabs=$("sheetTabs"),addSheetButton=$("addSheetButton"),deleteSheetButton=$("deleteSheetButton"),headingForm=$("headingForm"),headingInput=$("headingInput"),openHeadingKeyboard=$("openHeadingKeyboard"),keyboardOverlay=$("keyboardOverlay"),keyboardClose=$("keyboardClose"),touchKeyboard=$("touchKeyboard"),draftDisplay=$("draftDisplay"),keyboardTitle=$("keyboardTitle"),keyboardHint=$("keyboardHint"),nativeInput=$("nativeInput"),nativeCancel=$("nativeCancel"),nativeSave=$("nativeSave"),sections=$("sections"),taskViewport=$("taskViewport"),emptyState=$("emptyState"),openCount=$("openCount"),progressLabel=$("progressLabel"),clearCompleted=$("clearCompleted"),syncStatus=$("syncStatus"),themeOverlay=$("themeOverlay"),themeClose=$("themeClose"),colorArea=$("colorArea"),colorCursor=$("colorCursor"),hueSlider=$("hueSlider"),colorPreview=$("colorPreview"),hexValue=$("hexValue"),recentColorsElement=$("recentColors"),themeCancel=$("themeCancel"),themeSave=$("themeSave");',
+          'native element constants')
+
+          rep(
+          'let items=[],loaded=false,draft="",shift=true,mode="letters",busy=false,unsubscribe=null,keyboardContext=null;',
+          'let items=[],loaded=false,draft="",shift=true,mode="letters",busy=false,unsubscribe=null,keyboardContext=null,nativeInputMode=false;\nconst isIOSDevice=()=>/iP(?:ad|hone|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);',
+          'ios state')
+
+          rep(
+          '''function openKeyboard(context){
+  keyboardContext=context;
+  draft=context.initialText||"";
+  shift=context.shift!==false;
+  mode=context.type==="hex"?"hex":"letters";
+  busy=false;
+  keyboardTitle.textContent=context.title;
+  keyboardHint.textContent=`Touch the keys or use a physical keyboard · ${context.maxLength} characters maximum`;
+  renderDraft();
+  renderKeyboard();
+  keyboardOverlay.hidden=false;
+  document.body.classList.add("keyboard-open");
+}''',
+          '''function openKeyboard(context){
+  keyboardContext=context;
+  draft=context.initialText||"";
+  shift=context.shift!==false;
+  mode=context.type==="hex"?"hex":"letters";
+  nativeInputMode=isIOSDevice()&&context.type!=="hex";
+  busy=false;
+  keyboardTitle.textContent=context.title;
+  keyboardHint.textContent=`Touch the keys or use a physical keyboard · ${context.maxLength} characters maximum`;
+  nativeInput.value=draft;
+  nativeInput.maxLength=context.maxLength;
+  nativeInput.placeholder=context.placeholder||"Type here…";
+  nativeSave.textContent=context.actionLabel||"Add";
+  renderDraft();
+  renderKeyboard();
+  keyboardOverlay.classList.toggle("native-mode",nativeInputMode);
+  keyboardOverlay.querySelector(".keyboard-panel").classList.toggle("native-mode",nativeInputMode);
+  keyboardOverlay.hidden=false;
+  document.body.classList.add("keyboard-open");
+  if(nativeInputMode){
+    requestAnimationFrame(()=>{
+      nativeInput.focus({preventScroll:true});
+      nativeInput.setSelectionRange(nativeInput.value.length,nativeInput.value.length);
+    });
+  }
+}''',
+          'open keyboard')
+
+          rep(
+          '''function closeKeyboard(){
+  keyboardOverlay.hidden=true;
+  document.body.classList.remove("keyboard-open");
+  draft="";
+  busy=false;
+  keyboardContext=null;
+  touchKeyboard.replaceChildren();
+}''',
+          '''function closeKeyboard(){
+  nativeInput.blur();
+  keyboardOverlay.hidden=true;
+  keyboardOverlay.classList.remove("native-mode");
+  keyboardOverlay.querySelector(".keyboard-panel").classList.remove("native-mode");
+  document.body.classList.remove("keyboard-open");
+  draft="";
+  nativeInput.value="";
+  nativeInputMode=false;
+  busy=false;
+  keyboardContext=null;
+  touchKeyboard.replaceChildren();
+}''',
+          'close keyboard')
+
+          rep(
+          '''document.addEventListener("keydown",event=>{
+  if(keyboardOverlay.hidden)return;
+  if(event.key==="Escape")closeKeyboard();''',
+          '''document.addEventListener("keydown",event=>{
+  if(keyboardOverlay.hidden||nativeInputMode)return;
+  if(event.key==="Escape")closeKeyboard();''',
+          'hardware key guard')
+
+          rep(
+          'keyboardClose.addEventListener("click",closeKeyboard);',
+          'keyboardClose.addEventListener("click",closeKeyboard);\nnativeCancel.addEventListener("click",closeKeyboard);\nnativeSave.addEventListener("click",commit);\nnativeInput.addEventListener("input",()=>{draft=nativeInput.value});',
+          'native events')
+
+          p.write_text(s)
+          start=s.index('<script type="module">')+len('<script type="module">')
+          end=s.index('</script>',start)
+          Path('/tmp/y70-app.mjs').write_text(s[start:end])
+          PY
+          node --check /tmp/y70-app.mjs
+      - name: Commit app update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Use native iOS keyboard for text entry"
+          git push
+      - name: Close trigger issue
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue close "${{ github.event.issue.number }}" --comment "Applied the iOS native keyboard update."
