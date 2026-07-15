@@ -6,29 +6,29 @@
 <meta name="theme-color" content="#090b10">
 <title>Y70 Tasks</title>
 <style>
-:root{color-scheme:dark;--bg:#090b10;--panel:rgba(19,23,32,.94);--text:#f7f8fb;--muted:#959dac;--line:rgba(255,255,255,.1);--accent:#ca3229;--accent-soft:rgba(202,50,41,.16);--danger:#ff6b7a}
+:root{color-scheme:dark;--bg:#090b10;--panel:rgba(19,23,32,.94);--text:#f7f8fb;--muted:#959dac;--line:rgba(255,255,255,.1);--accent:#ca3229;--accent-soft:rgba(202,50,41,.16);--accent-glow:rgba(202,50,41,.16);--accent-shadow:rgba(202,50,41,.24);--accent-line:rgba(202,50,41,.38);--picker-hue:#ff0000;--danger:#ff6b7a}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
-body{min-height:100dvh;overflow:hidden;background:radial-gradient(circle at 50% -8%,rgba(202,50,41,.16),transparent 24rem),linear-gradient(180deg,#0c1016 0%,var(--bg) 42%)}
+body{min-height:100dvh;overflow:hidden;background:radial-gradient(circle at 50% -8%,var(--accent-glow),transparent 24rem),linear-gradient(180deg,#0c1016 0%,var(--bg) 42%)}
 button,input{font:inherit}button{border:0;color:inherit;cursor:pointer;touch-action:manipulation}
 .app{width:min(100%,760px);height:100dvh;margin:0 auto;padding:clamp(9px,1.4vh,18px) clamp(10px,2.2vw,22px) 9px;display:flex;flex-direction:column;gap:7px;overflow:hidden}
-.eyebrow{margin:0;color:var(--accent);font-size:clamp(10px,1.7vw,13px);font-weight:850;letter-spacing:.13em;text-transform:uppercase;text-align:center;flex:0 0 auto}
-.sheetbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:5px;flex:0 0 auto}
+.eyebrow{align-self:center;margin:0;padding:0;background:transparent;color:var(--accent);font-size:clamp(10px,1.7vw,13px);font-weight:850;letter-spacing:.13em;text-transform:uppercase;text-align:center;flex:0 0 auto}
+.sheetbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:4px;min-width:0}
 .sheet-tabs{display:flex;align-items:center;gap:5px;min-width:0;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
 .sheet-tabs::-webkit-scrollbar{display:none}
-.sheet-tab{flex:0 0 auto;max-width:180px;height:34px;padding:0 11px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.045);color:var(--muted);font-size:clamp(11px,2vw,14px);font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sheet-tab{flex:0 0 auto;max-width:150px;height:32px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.045);color:var(--muted);font-size:clamp(10px,1.8vw,13px);font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;user-select:none;-webkit-user-select:none}
 .sheet-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
-.sheet-control{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.06);color:var(--muted);font-size:21px;font-weight:700}
+.sheet-control{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.06);color:var(--muted);font-size:20px;font-weight:700}
 .sheet-control.add-sheet{background:var(--accent);color:#fff}.sheet-control:disabled{opacity:.3;cursor:default}
-.header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto}
-h1{margin:0;font-size:clamp(30px,6.2vw,48px);line-height:.98;letter-spacing:-.05em}
+.header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:7px;flex:0 0 auto}
+h1{margin:0;font-size:clamp(28px,5.6vw,44px);line-height:.98;letter-spacing:-.05em}
 .count{min-width:56px;padding:7px 8px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.045);text-align:center}
 .count strong{display:block;font-size:clamp(20px,3.8vw,29px);line-height:1}
 .count span{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .composer{display:grid;grid-template-columns:1fr auto;gap:6px;padding:6px;border:1px solid var(--line);border-radius:15px;background:rgba(15,18,25,.9);box-shadow:0 10px 28px rgba(0,0,0,.25);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);flex:0 0 auto}
 #headingInput{width:100%;min-width:0;height:clamp(44px,6.6vw,55px);padding:0 12px;border:0;outline:0;border-radius:11px;background:transparent;color:var(--text);font-size:clamp(15px,2.7vw,21px);cursor:pointer;caret-color:transparent}
 #headingInput::placeholder{color:#6e7684}
-.add{width:clamp(44px,6.6vw,55px);height:clamp(44px,6.6vw,55px);border-radius:11px;background:var(--accent);color:#fff;font-size:clamp(25px,4.2vw,34px);font-weight:500;line-height:1;box-shadow:0 8px 24px rgba(202,50,41,.24)}
+.add{width:clamp(44px,6.6vw,55px);height:clamp(44px,6.6vw,55px);border-radius:11px;background:var(--accent);color:#fff;font-size:clamp(25px,4.2vw,34px);font-weight:500;line-height:1;box-shadow:0 8px 24px var(--accent-shadow)}
 .add:active,.section-add:active,.section-delete:active,.sheet-control:active:not(:disabled){transform:scale(.94)}
 .toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:clamp(11px,1.9vw,14px);flex:0 0 auto}
 .toolbar button{padding:6px 8px;border-radius:9px;background:transparent;color:var(--muted);font-weight:700}
@@ -38,7 +38,7 @@ h1{margin:0;font-size:clamp(30px,6.2vw,48px);line-height:.98;letter-spacing:-.05
 .sections{display:flex;flex-direction:column;gap:8px;padding-bottom:4px}
 .section{border:1px solid var(--line);border-radius:14px;background:rgba(17,21,29,.72);overflow:hidden}
 .section-head{min-height:41px;display:flex;align-items:center;justify-content:space-between;gap:9px;padding:5px 6px 5px 11px;background:rgba(255,255,255,.025);border-bottom:1px solid var(--line)}
-.section-title{min-width:0;margin:0;font-size:clamp(16px,3vw,22px);line-height:1.1;letter-spacing:-.025em;overflow-wrap:anywhere}
+.section-title{min-width:0;margin:0;font-size:clamp(16px,3vw,22px);line-height:1.1;letter-spacing:-.025em;overflow-wrap:anywhere;user-select:none;-webkit-user-select:none}
 .section-actions{display:flex;align-items:center;gap:4px;flex:0 0 auto}
 .section-meta{min-width:22px;color:var(--muted);font-size:10px;font-weight:800;text-align:center}
 .section-add,.section-delete{display:grid;place-items:center;width:31px;height:31px;border-radius:9px;background:rgba(255,255,255,.055);font-size:20px;line-height:1}
@@ -46,8 +46,8 @@ h1{margin:0;font-size:clamp(30px,6.2vw,48px);line-height:.98;letter-spacing:-.05
 .tasks{display:flex;flex-direction:column;gap:4px;margin:0;padding:5px;list-style:none}
 .task{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;min-height:clamp(45px,7vw,58px);padding:6px 7px 6px 9px;border:1px solid rgba(255,255,255,.065);border-radius:11px;background:var(--panel);transition:opacity 160ms ease,transform 160ms ease,border-color 160ms ease,box-shadow 160ms ease;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .task:active{transform:scale(.992)}.task.done{opacity:.58;background:rgba(19,23,32,.66)}
-.task.dragging{opacity:.92;transform:scale(1.015);border-color:var(--accent);box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px rgba(202,50,41,.28);z-index:5}
-body.task-dragging .task:not(.dragging){transition:transform 90ms ease}
+.task.dragging{opacity:.92;transform:scale(1.015);border-color:var(--accent);box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px var(--accent-line);z-index:5;touch-action:none}
+body.task-dragging{touch-action:none;overscroll-behavior:none}body.task-dragging .task:not(.dragging){transition:transform 90ms ease}
 .check{position:relative;width:clamp(27px,4.5vw,35px);height:clamp(27px,4.5vw,35px);border:2px solid #66707f;border-radius:50%;background:transparent}
 .task.done .check{border-color:var(--accent);background:var(--accent)}
 .task.done .check:after{content:"";position:absolute;left:34%;top:19%;width:20%;height:42%;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
@@ -62,32 +62,46 @@ body.task-dragging .task:not(.dragging){transition:transform 90ms ease}
 .empty p{max-width:360px;margin:0;font-size:clamp(13px,2.5vw,17px);line-height:1.4}
 .footer{flex:0 0 auto;padding-top:1px;color:#5e6673;font-size:10px;text-align:center}.sync.error{color:var(--danger)}
 body.keyboard-open{overflow:hidden}
-.keyboard-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;padding:16px;background:rgba(2,4,8,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.keyboard-overlay{position:fixed;inset:0;z-index:70;display:flex;align-items:flex-end;justify-content:center;padding:16px;background:rgba(2,4,8,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .keyboard-panel{width:min(100%,760px);max-height:calc(100dvh - 32px);overflow-y:auto;padding:clamp(20px,4vw,32px);border:1px solid var(--line);border-radius:30px;background:rgba(15,18,25,.98);box-shadow:0 30px 100px rgba(0,0,0,.62)}
 .keyboard-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.keyboard-head h2{margin:0;font-size:clamp(28px,5vw,42px);letter-spacing:-.035em}
 .close{display:grid;place-items:center;width:clamp(54px,9vw,68px);height:clamp(54px,9vw,68px);border-radius:18px;background:rgba(255,255,255,.06);color:var(--muted);font-size:clamp(28px,5vw,38px)}
-.draft{min-height:clamp(92px,15vw,132px);margin-bottom:18px;padding:20px 22px;border:1px solid rgba(202,50,41,.34);border-radius:22px;background:#0a0d12;color:var(--text);font-size:clamp(25px,4.5vw,34px);font-weight:650;line-height:1.3;overflow-wrap:anywhere}
+.draft{min-height:clamp(92px,15vw,132px);margin-bottom:18px;padding:20px 22px;border:1px solid var(--accent-line);border-radius:22px;background:#0a0d12;color:var(--text);font-size:clamp(25px,4.5vw,34px);font-weight:650;line-height:1.3;overflow-wrap:anywhere}
 .draft.draft-empty{color:#6e7684}
 .caret{display:inline-block;width:3px;height:1em;margin-left:3px;vertical-align:-.12em;border-radius:2px;background:var(--accent);animation:blink 900ms steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 .keyboard{display:flex;flex-direction:column;gap:clamp(7px,1.4vw,11px);user-select:none;-webkit-user-select:none}.key-row{display:flex;justify-content:center;gap:clamp(5px,1.1vw,9px)}
 .key{display:grid;place-items:center;flex:1 1 0;min-width:0;height:clamp(56px,9.5vw,76px);padding:0 4px;border:1px solid rgba(255,255,255,.08);border-radius:clamp(10px,2vw,16px);background:#252b36;color:var(--text);font-size:clamp(18px,3.5vw,27px);font-weight:750}
-.key:active{transform:scale(.94);background:#343c49}.key-wide{flex:1.55 1 0}.key-space{flex:4.2 1 0;color:var(--muted);font-size:clamp(15px,2.7vw,20px)}.key-action{flex:2.2 1 0;background:var(--accent);color:#fff}.key-shift.active{background:var(--accent-soft);border-color:rgba(202,50,41,.5);color:var(--accent)}
+.key:active{transform:scale(.94);background:#343c49}.key-wide{flex:1.55 1 0}.key-space{flex:4.2 1 0;color:var(--muted);font-size:clamp(15px,2.7vw,20px)}.key-action{flex:2.2 1 0;background:var(--accent);color:#fff}.key-shift.active{background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent)}
 .keyboard-hint{margin:16px 0 0;color:#687180;font-size:clamp(12px,2.2vw,16px);text-align:center}
-@media(max-width:430px){.app{padding-inline:8px}.sheet-tab{max-width:150px;padding-inline:9px}.keyboard-overlay{padding:8px}.keyboard-panel{padding:16px 12px 18px;border-radius:24px}.key{height:58px}.section-head{padding-left:9px}.tasks{padding:4px}.task{padding-left:7px}}
+
+.theme-overlay{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;padding:14px;background:rgba(2,4,8,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.theme-panel{width:min(100%,760px);max-height:calc(100dvh - 28px);overflow-y:auto;padding:clamp(18px,3.5vw,28px);border:1px solid var(--line);border-radius:28px;background:rgba(15,18,25,.985);box-shadow:0 30px 100px rgba(0,0,0,.62)}
+.theme-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}.theme-head h2{margin:0;font-size:clamp(25px,4.6vw,38px);letter-spacing:-.035em}
+.color-area{position:relative;width:100%;height:clamp(170px,30vw,245px);border:1px solid var(--line);border-radius:20px;background:linear-gradient(to top,#000,transparent),linear-gradient(to right,#fff,var(--picker-hue));overflow:hidden;touch-action:none}
+.color-cursor{position:absolute;width:28px;height:28px;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.55);transform:translate(-50%,-50%);pointer-events:none}
+.hue-slider{width:100%;height:30px;margin:14px 0 12px;padding:0;border:0;border-radius:999px;background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);appearance:none;-webkit-appearance:none;touch-action:none}
+.hue-slider::-webkit-slider-runnable-track{height:30px;border-radius:999px;background:transparent}.hue-slider::-webkit-slider-thumb{width:26px;height:34px;margin-top:-2px;border:3px solid #fff;border-radius:10px;background:transparent;box-shadow:0 2px 8px rgba(0,0,0,.55);appearance:none;-webkit-appearance:none}
+.hue-slider::-moz-range-track{height:30px;border-radius:999px;background:transparent}.hue-slider::-moz-range-thumb{width:22px;height:30px;border:3px solid #fff;border-radius:10px;background:transparent}
+.color-meta{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px}.color-preview{width:46px;height:46px;border:2px solid rgba(255,255,255,.72);border-radius:14px;background:var(--accent)}
+.hex-value{height:46px;padding:0 16px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.055);color:var(--text);font-size:clamp(18px,3.5vw,27px);font-weight:750;letter-spacing:.06em;text-align:left}
+.recent-row{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px;margin-top:14px;color:var(--muted);font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:.08em}.recent-colors{display:flex;gap:8px;min-height:38px}.recent-color{width:38px;height:38px;border:2px solid rgba(255,255,255,.34);border-radius:12px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.22)}.recent-empty{align-self:center;color:#646c79;font-size:11px;text-transform:none;letter-spacing:0}
+.theme-actions{display:grid;grid-template-columns:1fr 1.35fr;gap:9px;margin-top:16px}.theme-action{height:48px;border-radius:14px;background:rgba(255,255,255,.06);font-weight:800}.theme-action.save{background:var(--accent);color:#fff}
+
+@media(max-width:430px){.app{padding-inline:8px}.header{gap:5px}h1{font-size:28px}.sheet-tab{max-width:112px;padding-inline:8px}.keyboard-overlay{padding:8px}.keyboard-panel{padding:16px 12px 18px;border-radius:24px}.key{height:58px}.section-head{padding-left:9px}.tasks{padding:4px}.task{padding-left:7px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <main class="app">
-  <p class="eyebrow">Y70 Virtual List</p>
-  <div class="sheetbar">
-    <div class="sheet-tabs" id="sheetTabs" aria-label="Task sheets"></div>
-    <button class="sheet-control add-sheet" id="addSheetButton" type="button" aria-label="Create new task sheet">+</button>
-    <button class="sheet-control" id="deleteSheetButton" type="button" aria-label="Delete current task sheet">×</button>
-  </div>
+  <button class="eyebrow" id="themeButton" type="button" aria-label="Change accent colour">Y70 Virtual List</button>
   <header class="header">
     <h1>Tasks</h1>
+    <div class="sheetbar">
+      <div class="sheet-tabs" id="sheetTabs" aria-label="Task sheets"></div>
+      <button class="sheet-control add-sheet" id="addSheetButton" type="button" aria-label="Create new task sheet">+</button>
+      <button class="sheet-control" id="deleteSheetButton" type="button" aria-label="Delete current task sheet">×</button>
+    </div>
     <div class="count" aria-label="Open task count"><strong id="openCount">0</strong><span>open</span></div>
   </header>
   <form class="composer" id="headingForm" autocomplete="off">
@@ -109,6 +123,23 @@ body.keyboard-open{overflow:hidden}
     <p class="keyboard-hint" id="keyboardHint">Touch the keys to type</p>
   </div>
 </div>
+
+<div class="theme-overlay" id="themeOverlay" role="dialog" aria-modal="true" aria-labelledby="themeTitle" hidden>
+  <div class="theme-panel">
+    <div class="theme-head"><h2 id="themeTitle">Accent colour</h2><button class="close" id="themeClose" type="button" aria-label="Close colour picker">×</button></div>
+    <div class="color-area" id="colorArea" aria-label="Colour saturation and brightness picker"><span class="color-cursor" id="colorCursor" aria-hidden="true"></span></div>
+    <input class="hue-slider" id="hueSlider" type="range" min="0" max="360" step="1" value="0" aria-label="Colour hue">
+    <div class="color-meta">
+      <span class="color-preview" id="colorPreview" aria-hidden="true"></span>
+      <button class="hex-value" id="hexValue" type="button" aria-label="Enter a hexadecimal colour value">#CA3229</button>
+    </div>
+    <div class="recent-row"><span>Recent</span><div class="recent-colors" id="recentColors"></div></div>
+    <div class="theme-actions">
+      <button class="theme-action" id="themeCancel" type="button">Cancel</button>
+      <button class="theme-action save" id="themeSave" type="button">Save colour</button>
+    </div>
+  </div>
+</div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import{collection,deleteDoc,doc,initializeFirestore,memoryLocalCache,onSnapshot,setDoc,updateDoc,writeBatch}from"https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
@@ -124,10 +155,11 @@ const firebaseConfig={
 
 const db=initializeFirestore(initializeApp(firebaseConfig),{localCache:memoryLocalCache()});
 const $=id=>document.getElementById(id);
-const sheetTabs=$("sheetTabs"),addSheetButton=$("addSheetButton"),deleteSheetButton=$("deleteSheetButton"),headingForm=$("headingForm"),headingInput=$("headingInput"),openHeadingKeyboard=$("openHeadingKeyboard"),keyboardOverlay=$("keyboardOverlay"),keyboardClose=$("keyboardClose"),touchKeyboard=$("touchKeyboard"),draftDisplay=$("draftDisplay"),keyboardTitle=$("keyboardTitle"),keyboardHint=$("keyboardHint"),sections=$("sections"),taskViewport=$("taskViewport"),emptyState=$("emptyState"),openCount=$("openCount"),progressLabel=$("progressLabel"),clearCompleted=$("clearCompleted"),syncStatus=$("syncStatus");
+const themeButton=$("themeButton"),sheetTabs=$("sheetTabs"),addSheetButton=$("addSheetButton"),deleteSheetButton=$("deleteSheetButton"),headingForm=$("headingForm"),headingInput=$("headingInput"),openHeadingKeyboard=$("openHeadingKeyboard"),keyboardOverlay=$("keyboardOverlay"),keyboardClose=$("keyboardClose"),touchKeyboard=$("touchKeyboard"),draftDisplay=$("draftDisplay"),keyboardTitle=$("keyboardTitle"),keyboardHint=$("keyboardHint"),sections=$("sections"),taskViewport=$("taskViewport"),emptyState=$("emptyState"),openCount=$("openCount"),progressLabel=$("progressLabel"),clearCompleted=$("clearCompleted"),syncStatus=$("syncStatus"),themeOverlay=$("themeOverlay"),themeClose=$("themeClose"),colorArea=$("colorArea"),colorCursor=$("colorCursor"),hueSlider=$("hueSlider"),colorPreview=$("colorPreview"),hexValue=$("hexValue"),recentColorsElement=$("recentColors"),themeCancel=$("themeCancel"),themeSave=$("themeSave");
 
 let items=[],loaded=false,draft="",shift=true,mode="letters",busy=false,unsubscribe=null,keyboardContext=null;
 let currentSheetId=null,bootstrapping=false,reorderBusy=false,deleteSheetArmedUntil=0,dragState=null;
+let currentAccent="#CA3229",pendingAccent=currentAccent,recentColors=[],pickerHue=0,pickerSaturation=0,pickerValue=0;
 
 const taskCollection=()=>collection(db,"lists","main","tasks");
 const itemDocument=id=>doc(db,"lists","main","tasks",id);
@@ -146,6 +178,148 @@ const currentHeadings=()=>currentItems().filter(isHeading).sort(byOrder);
 const currentTasks=()=>currentItems().filter(isTask);
 const headingTasks=headingId=>currentTasks().filter(task=>(task.headingId||null)===(headingId||null)).sort(byOrder);
 const maxOrder=list=>list.length?Math.max(...list.map(itemOrder)):0;
+
+
+const normalizeHex=value=>{
+  const raw=String(value||"").trim().replace(/^#/,"");
+  if(/^[0-9a-f]{3}$/i.test(raw))return `#${raw.split("").map(char=>char+char).join("").toUpperCase()}`;
+  if(/^[0-9a-f]{6}$/i.test(raw))return `#${raw.toUpperCase()}`;
+  return null;
+};
+const hexToRgb=hex=>{
+  const clean=normalizeHex(hex);
+  if(!clean)return null;
+  return {r:parseInt(clean.slice(1,3),16),g:parseInt(clean.slice(3,5),16),b:parseInt(clean.slice(5,7),16)};
+};
+const rgbToHex=(r,g,b)=>`#${[r,g,b].map(value=>Math.round(Math.max(0,Math.min(255,value))).toString(16).padStart(2,"0")).join("").toUpperCase()}`;
+const rgbToHsv=({r,g,b})=>{
+  r/=255;g/=255;b/=255;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b),delta=max-min;
+  let h=0;
+  if(delta){
+    if(max===r)h=60*(((g-b)/delta)%6);
+    else if(max===g)h=60*((b-r)/delta+2);
+    else h=60*((r-g)/delta+4);
+  }
+  if(h<0)h+=360;
+  return {h,s:max===0?0:delta/max,v:max};
+};
+const hsvToRgb=(h,s,v)=>{
+  const c=v*s,x=c*(1-Math.abs((h/60)%2-1)),m=v-c;
+  let r=0,g=0,b=0;
+  if(h<60){r=c;g=x}else if(h<120){r=x;g=c}else if(h<180){g=c;b=x}else if(h<240){g=x;b=c}else if(h<300){r=x;b=c}else{r=c;b=x}
+  return {r:(r+m)*255,g:(g+m)*255,b:(b+m)*255};
+};
+function setAccent(hex){
+  const clean=normalizeHex(hex)||"#CA3229";
+  const rgb=hexToRgb(clean);
+  const root=document.documentElement.style;
+  root.setProperty("--accent",clean);
+  root.setProperty("--accent-soft",`rgba(${rgb.r},${rgb.g},${rgb.b},.16)`);
+  root.setProperty("--accent-glow",`rgba(${rgb.r},${rgb.g},${rgb.b},.16)`);
+  root.setProperty("--accent-shadow",`rgba(${rgb.r},${rgb.g},${rgb.b},.24)`);
+  root.setProperty("--accent-line",`rgba(${rgb.r},${rgb.g},${rgb.b},.38)`);
+}
+function syncThemeFromSettings(){
+  const settings=items.find(isSettings);
+  const saved=normalizeHex(settings?.accentColor)||"#CA3229";
+  const history=Array.isArray(settings?.recentColors)?settings.recentColors.map(normalizeHex).filter(Boolean):[];
+  recentColors=[...new Set(history)].slice(0,5);
+  if(themeOverlay.hidden){
+    currentAccent=saved;
+    pendingAccent=saved;
+    setAccent(saved);
+  }
+}
+function renderRecentColors(){
+  recentColorsElement.replaceChildren();
+  if(!recentColors.length){
+    const empty=document.createElement("span");
+    empty.className="recent-empty";
+    empty.textContent="No saved colours yet";
+    recentColorsElement.append(empty);
+    return;
+  }
+  recentColors.forEach(hex=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="recent-color";
+    button.style.background=hex;
+    button.title=hex;
+    button.setAttribute("aria-label",`Use recent colour ${hex}`);
+    button.onclick=()=>syncPickerFromHex(hex);
+    recentColorsElement.append(button);
+  });
+}
+function renderPicker(){
+  document.documentElement.style.setProperty("--picker-hue",`hsl(${pickerHue} 100% 50%)`);
+  hueSlider.value=String(Math.round(pickerHue));
+  colorCursor.style.left=`${pickerSaturation*100}%`;
+  colorCursor.style.top=`${(1-pickerValue)*100}%`;
+  colorPreview.style.background=pendingAccent;
+  hexValue.textContent=pendingAccent;
+  renderRecentColors();
+}
+function syncPickerFromHex(hex){
+  const clean=normalizeHex(hex);
+  if(!clean)return false;
+  const hsv=rgbToHsv(hexToRgb(clean));
+  pendingAccent=clean;
+  pickerHue=hsv.h;
+  pickerSaturation=hsv.s;
+  pickerValue=hsv.v;
+  setAccent(clean);
+  renderPicker();
+  return true;
+}
+function updatePickerFromHsv(){
+    const rgb=hsvToRgb(pickerHue,pickerSaturation,pickerValue);
+  pendingAccent=rgbToHex(rgb.r,rgb.g,rgb.b);
+  setAccent(pendingAccent);
+  renderPicker();
+}
+function openThemePicker(){
+  pendingAccent=currentAccent;
+  syncPickerFromHex(pendingAccent);
+  themeOverlay.hidden=false;
+  document.body.classList.add("theme-open");
+}
+function closeThemePicker({restore=true}={}){
+  themeOverlay.hidden=true;
+  document.body.classList.remove("theme-open");
+  if(restore){
+    pendingAccent=currentAccent;
+    setAccent(currentAccent);
+  }
+}
+async function saveTheme(){
+  const clean=normalizeHex(pendingAccent);
+  if(!clean)return;
+  const history=[clean,currentAccent,...recentColors].map(normalizeHex).filter(Boolean);
+  const unique=[...new Set(history)].slice(0,5);
+  status("Saving accent colour…");
+  try{
+    await setDoc(settingsDocument(),{kind:"settings",accentColor:clean,recentColors:unique,updatedAt:Date.now()},{merge:true});
+    currentAccent=clean;
+    recentColors=unique;
+    setAccent(clean);
+    closeThemePicker({restore:false});
+    status("Accent colour saved");
+  }catch(error){
+    console.error("Could not save accent colour:",error);
+    status("Could not save accent colour",true);
+  }
+}
+function applyHexDraft(value){
+  const clean=normalizeHex(value);
+  if(!clean){
+    status("Use a 3 or 6 digit hex colour",true);
+    return false;
+  }
+  syncPickerFromHex(clean);
+  return true;
+}
+
 
 function status(text,error=false){
   syncStatus.textContent=text;
@@ -172,7 +346,11 @@ function row(keys){
 
 function renderKeyboard(){
   touchKeyboard.replaceChildren();
-  if(mode==="letters"){
+  if(mode==="hex"){
+    row([..."1234567890"].map(value=>key(value,{value})));
+    row([..."ABCDEF"].map(value=>key(value,{value})));
+    row([key("#",{value:"#",className:"key-wide"}),key("⌫",{action:"backspace",className:"key-wide",aria:"Backspace"}),key(keyboardContext?.actionLabel||"Use",{action:"commit",className:"key-action"})]);
+  }else if(mode==="letters"){
     row([..."1234567890"].map(value=>key(value,{value})));
     row([..."qwertyuiop"].map(value=>key(shift?value.toUpperCase():value,{value})));
     row([..."asdfghjkl"].map(value=>key(shift?value.toUpperCase():value,{value})));
@@ -181,7 +359,7 @@ function renderKeyboard(){
     row([shiftKey,...[..."zxcvbnm"].map(value=>key(shift?value.toUpperCase():value,{value})),key("⌫",{action:"backspace",className:"key-wide",aria:"Backspace"})]);
     row([key("#+=",{action:"symbols",className:"key-wide",aria:"Show symbols"}),key(".",{value:"."}),key(",",{value:","}),key("Space",{value:" ",className:"key-space"}),key("-",{value:"-"}),key(keyboardContext?.actionLabel||"Add",{action:"commit",className:"key-action"})]);
   }else{
-    for(const symbols of [["!","@","#","$","%","^","&","*","(",")"],["-","_","+","=","/","\\",":",";","'",'"'],["[","]","{","}","<",">",",",".","?","`"]]){
+    for(const symbols of[["!","@","#","$","%","^","&","*","(",")"],["-","_","+","=","/","\\",":",";","'",'"'],["[","]","{","}","<",">",",",".","?","`"]]){
       row(symbols.map(value=>key(value,{value})));
     }
     row([key("ABC",{action:"letters",className:"key-wide",aria:"Show letters"}),key("Space",{value:" ",className:"key-space"}),key("⌫",{action:"backspace",className:"key-wide",aria:"Backspace"}),key(keyboardContext?.actionLabel||"Add",{action:"commit",className:"key-action"})]);
@@ -201,9 +379,9 @@ function renderDraft(){
 
 function openKeyboard(context){
   keyboardContext=context;
-  draft="";
-  shift=true;
-  mode="letters";
+  draft=context.initialText||"";
+  shift=context.shift!==false;
+  mode=context.type==="hex"?"hex":"letters";
   busy=false;
   keyboardTitle.textContent=context.title;
   keyboardHint.textContent=`Touch the keys to type · ${context.maxLength} characters maximum`;
@@ -224,6 +402,17 @@ function closeKeyboard(){
 
 function insert(value){
   const max=keyboardContext?.maxLength||180;
+  if(keyboardContext?.type==="hex"){
+    if(value==="#"&&draft.length===0){
+      draft="#";
+    }else if(/^[0-9a-f]$/i.test(value)&&[...draft].length<max){
+      draft+=value.toUpperCase();
+    }else{
+      return;
+    }
+    renderDraft();
+    return;
+  }
   if([...draft].length>=max)return;
   draft+=/^[a-z]$/i.test(value)?(shift?value.toUpperCase():value.toLowerCase()):value;
   renderDraft();
@@ -266,7 +455,7 @@ async function bootstrapFirstSheet(rawItems){
         order:index*1000
       }));
     }
-    batch.set(settingsDocument(),{kind:"settings",activeSheetId:"sheet-main",createdAt:0,updatedAt:now});
+    batch.set(settingsDocument(),{kind:"settings",activeSheetId:"sheet-main",createdAt:0,updatedAt:now},{merge:true});
     await batch.commit();
     return true;
   }catch(error){
@@ -401,6 +590,21 @@ async function addTask(text,headingId=null){
   }
 }
 
+
+async function renameItem(id,text,label){
+  const clean=text.trim();
+  if(!clean)return false;
+  status(`Saving ${label} name…`);
+  try{
+    await updateDoc(itemDocument(id),{text:clean});
+    return true;
+  }catch(error){
+    console.error(`Could not rename ${label}:`,error);
+    status(`Could not rename ${label}`,true);
+    return false;
+  }
+}
+
 async function commit(){
   if(busy||!keyboardContext)return;
   busy=true;
@@ -408,6 +612,9 @@ async function commit(){
     let saved=false;
     if(keyboardContext.type==="sheet")saved=await addSheet(draft);
     else if(keyboardContext.type==="heading")saved=await addHeading(draft);
+    else if(keyboardContext.type==="renameSheet")saved=await renameItem(keyboardContext.itemId,draft,"task sheet");
+    else if(keyboardContext.type==="renameHeading")saved=await renameItem(keyboardContext.itemId,draft,"heading");
+    else if(keyboardContext.type==="hex")saved=applyHexDraft(draft);
     else saved=await addTask(draft,keyboardContext.headingId);
     if(saved)closeKeyboard();
   }finally{
@@ -460,22 +667,28 @@ async function clearDone(){
   }
 }
 
+function unlockTaskDragScroll(){
+  if(!dragState)return;
+  taskViewport.style.overflowY=dragState.previousOverflowY||"";
+  document.body.classList.remove("task-dragging");
+}
 function cancelPendingDrag(){
   if(!dragState)return;
   clearTimeout(dragState.timer);
   if(dragState.dragging){
     dragState.row.classList.remove("dragging");
-    document.body.classList.remove("task-dragging");
+    unlockTaskDragScroll();
     try{
       if(dragState.row.hasPointerCapture(dragState.pointerId))dragState.row.releasePointerCapture(dragState.pointerId);
     }catch{}
   }
   dragState=null;
 }
-
 function beginTaskDrag(){
   if(!dragState)return;
   dragState.dragging=true;
+  dragState.previousOverflowY=taskViewport.style.overflowY;
+  taskViewport.style.overflowY="hidden";
   dragState.row.classList.add("dragging");
   document.body.classList.add("task-dragging");
   try{dragState.row.setPointerCapture(dragState.pointerId)}catch{}
@@ -504,6 +717,7 @@ function onTaskPointerMove(event){
     return;
   }
   event.preventDefault();
+  event.stopPropagation();
   const target=document.elementFromPoint(event.clientX,event.clientY)?.closest(".task");
   if(target&&target!==dragState.row&&target.parentElement===dragState.parent){
     const rect=target.getBoundingClientRect();
@@ -517,7 +731,7 @@ function onTaskPointerMove(event){
 async function saveDraggedOrder(rowElement,parentElement,pointerId){
   const orderedIds=[...parentElement.querySelectorAll(".task")].map(row=>row.dataset.taskId).filter(Boolean);
   rowElement.classList.remove("dragging");
-  document.body.classList.remove("task-dragging");
+  unlockTaskDragScroll();
   try{if(rowElement.hasPointerCapture(pointerId))rowElement.releasePointerCapture(pointerId)}catch{}
   dragState=null;
   reorderBusy=true;
@@ -549,6 +763,43 @@ function onTaskPointerEnd(event){
   }
   const {row,parent,pointerId}=dragState;
   saveDraggedOrder(row,parent,pointerId);
+}
+
+
+function bindLongPress(element,callback,{delay=520}={}){
+  let state=null;
+  let suppressClick=false;
+  const clear=()=>{
+    if(!state)return;
+    clearTimeout(state.timer);
+    state=null;
+  };
+  element.addEventListener("pointerdown",event=>{
+    if(event.pointerType==="mouse"&&event.button!==0)return;
+    state={
+      pointerId:event.pointerId,
+      startX:event.clientX,
+      startY:event.clientY,
+      timer:setTimeout(()=>{
+        if(!state)return;
+        suppressClick=true;
+        callback();
+        state=null;
+      },delay)
+    };
+  });
+  element.addEventListener("pointermove",event=>{
+    if(!state||state.pointerId!==event.pointerId)return;
+    if(Math.hypot(event.clientX-state.startX,event.clientY-state.startY)>10)clear();
+  });
+  element.addEventListener("pointerup",clear);
+  element.addEventListener("pointercancel",clear);
+  element.addEventListener("click",event=>{
+    if(!suppressClick)return;
+    suppressClick=false;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  },true);
 }
 
 function createTaskRow(task){
@@ -589,6 +840,10 @@ function createSection(heading,sectionTasks,{general=false}={}){
   const title=document.createElement("h2");
   title.className="section-title";
   title.textContent=heading.text;
+  if(!general){
+    title.setAttribute("aria-label",`${heading.text}. Hold to rename.`);
+    bindLongPress(title,()=>openKeyboard({type:"renameHeading",itemId:heading.id,title:"Rename heading",placeholder:"Type a heading…",maxLength:80,actionLabel:"Save",initialText:heading.text}));
+  }
   const actions=document.createElement("div");
   actions.className="section-actions";
   const meta=document.createElement("span");
@@ -638,7 +893,9 @@ function renderSheets(){
     button.textContent=sheet.text;
     button.title=sheet.text;
     button.setAttribute("aria-pressed",String(sheet.id===currentSheetId));
-    button.onclick=()=>selectSheet(sheet.id);
+    button.setAttribute("aria-label",`${sheet.text}. Hold to rename.`);
+    bindLongPress(button,()=>openKeyboard({type:"renameSheet",itemId:sheet.id,title:"Rename task sheet",placeholder:"Name this sheet…",maxLength:40,actionLabel:"Save",initialText:sheet.text}));
+    button.addEventListener("click",()=>selectSheet(sheet.id));
     sheetTabs.append(button);
     if(sheet.id===currentSheetId)requestAnimationFrame(()=>button.scrollIntoView({block:"nearest",inline:"nearest"}));
   }
@@ -679,6 +936,7 @@ function subscribe(){
       if(started)return;
     }
     syncCurrentSheet();
+    syncThemeFromSettings();
     if(!reorderBusy)render();
     status("Cloud synced");
   },error=>{
@@ -724,6 +982,41 @@ deleteSheetButton.addEventListener("click",deleteCurrentSheet);
 keyboardClose.addEventListener("click",closeKeyboard);
 keyboardOverlay.addEventListener("click",event=>{if(event.target===keyboardOverlay)closeKeyboard()});
 clearCompleted.addEventListener("click",clearDone);
+
+
+document.addEventListener("touchmove",event=>{
+  if(dragState?.dragging)event.preventDefault();
+},{passive:false,capture:true});
+
+themeButton.addEventListener("click",openThemePicker);
+themeClose.addEventListener("click",()=>closeThemePicker());
+themeCancel.addEventListener("click",()=>closeThemePicker());
+themeSave.addEventListener("click",saveTheme);
+themeOverlay.addEventListener("click",event=>{if(event.target===themeOverlay)closeThemePicker()});
+hexValue.addEventListener("click",()=>openKeyboard({type:"hex",title:"Hex colour",placeholder:pendingAccent,maxLength:7,actionLabel:"Use",shift:false}));
+hueSlider.addEventListener("input",()=>{
+  pickerHue=Number(hueSlider.value);
+  updatePickerFromHsv();
+});
+function updateColorAreaFromPointer(event){
+  const rect=colorArea.getBoundingClientRect();
+  pickerSaturation=Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width));
+  pickerValue=1-Math.max(0,Math.min(1,(event.clientY-rect.top)/rect.height));
+  updatePickerFromHsv();
+}
+colorArea.addEventListener("pointerdown",event=>{
+  event.preventDefault();
+  try{colorArea.setPointerCapture(event.pointerId)}catch{}
+  updateColorAreaFromPointer(event);
+});
+colorArea.addEventListener("pointermove",event=>{
+  if(!colorArea.hasPointerCapture(event.pointerId))return;
+  event.preventDefault();
+  updateColorAreaFromPointer(event);
+});
+colorArea.addEventListener("pointerup",event=>{
+  try{if(colorArea.hasPointerCapture(event.pointerId))colorArea.releasePointerCapture(event.pointerId)}catch{}
+});
 
 render();
 subscribe();
