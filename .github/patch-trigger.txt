@@ -1,0 +1,1 @@
+The issue-triggered workflow applies the pending keyboard and heading reorder patch.
