@@ -1,0 +1,38 @@
+name: Trigger iOS native keyboard patch
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.event.pull_request.title == '[automation] Apply iOS native keyboard'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Extract and run validated patch
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          workflow=Path('.github/workflows/add-ios-native-keyboard.yml')
+          lines=workflow.read_text().splitlines()
+          start=next(i for i,line in enumerate(lines) if "python - <<'PY'" in line)+1
+          end=next(i for i in range(start,len(lines)) if lines[i].strip()=='PY')
+          code='\n'.join(line[10:] if line.startswith('          ') else line for line in lines[start:end])+'\n'
+          Path('/tmp/apply-ios-patch.py').write_text(code)
+          PY
+          python /tmp/apply-ios-patch.py
+          node --check /tmp/y70-app.mjs
+      - name: Commit app update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Use native iOS keyboard for text entry"
+          git push origin main
