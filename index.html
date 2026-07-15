@@ -36,8 +36,8 @@ h1{margin:0;font-size:clamp(28px,5.6vw,44px);line-height:.98;letter-spacing:-.05
 .viewport{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:3px}
 .viewport.empty-mode{overflow-y:hidden;padding-right:0}
 .sections{display:flex;flex-direction:column;gap:8px;padding-bottom:4px}
-.section{border:1px solid var(--line);border-radius:14px;background:rgba(17,21,29,.72);overflow:hidden}
-.section-head{min-height:41px;display:flex;align-items:center;justify-content:space-between;gap:9px;padding:5px 6px 5px 11px;background:rgba(255,255,255,.025);border-bottom:1px solid var(--line)}
+.section{border:1px solid var(--line);border-radius:14px;background:rgba(17,21,29,.72);overflow:hidden;transition:opacity 160ms ease,transform 160ms ease,border-color 160ms ease,box-shadow 160ms ease}.section.dragging{position:relative;z-index:6;opacity:.94;transform:scale(1.008);border-color:var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.48),0 0 0 1px var(--accent-line)}
+.section-head{min-height:41px;display:flex;align-items:center;justify-content:space-between;gap:9px;padding:5px 6px 5px 11px;background:rgba(255,255,255,.025);border-bottom:1px solid var(--line);touch-action:none;user-select:none;-webkit-user-select:none}
 .section-title{min-width:0;margin:0;font-size:clamp(16px,3vw,22px);line-height:1.1;letter-spacing:-.025em;overflow-wrap:anywhere;user-select:none;-webkit-user-select:none}
 .section-actions{display:flex;align-items:center;gap:4px;flex:0 0 auto}
 .section-meta{min-width:22px;color:var(--muted);font-size:10px;font-weight:800;text-align:center}
@@ -384,7 +384,7 @@ function openKeyboard(context){
   mode=context.type==="hex"?"hex":"letters";
   busy=false;
   keyboardTitle.textContent=context.title;
-  keyboardHint.textContent=`Touch the keys to type · ${context.maxLength} characters maximum`;
+  keyboardHint.textContent=`Touch the keys or use a physical keyboard · ${context.maxLength} characters maximum`;
   renderDraft();
   renderKeyboard();
   keyboardOverlay.hidden=false;
@@ -400,7 +400,7 @@ function closeKeyboard(){
   touchKeyboard.replaceChildren();
 }
 
-function insert(value){
+function insert(value,{preserveCase=false}={}){
   const max=keyboardContext?.maxLength||180;
   if(keyboardContext?.type==="hex"){
     if(value==="#"&&draft.length===0){
@@ -414,9 +414,9 @@ function insert(value){
     return;
   }
   if([...draft].length>=max)return;
-  draft+=/^[a-z]$/i.test(value)?(shift?value.toUpperCase():value.toLowerCase()):value;
+  draft+=preserveCase?value:(/^[a-z]$/i.test(value)?(shift?value.toUpperCase():value.toLowerCase()):value);
   renderDraft();
-  if(/^[a-z]$/i.test(value)&&shift){
+  if(!preserveCase&&/^[a-z]$/i.test(value)&&shift){
     shift=false;
     renderKeyboard();
   }
@@ -691,15 +691,18 @@ function beginTaskDrag(){
   taskViewport.style.overflowY="hidden";
   dragState.row.classList.add("dragging");
   document.body.classList.add("task-dragging");
-  status("Drag to reorder · release to save");
+  status(dragState.kind==="heading"?"Drag heading to reorder · release to save":"Drag task to reorder · release to save");
 }
 
-function startTaskGesture(task,rowElement,{inputType,inputId,clientX,clientY}){
+function startTaskGesture(item,rowElement,{inputType,inputId,clientX,clientY,kind="task"}){
   if(reorderBusy||dragState)return false;
   dragState={
-    task,
+    item,
+    kind,
     row:rowElement,
     parent:rowElement.parentElement,
+    selector:kind==="heading"?".section[data-heading-id]":".task",
+    dataKey:kind==="heading"?"headingId":"taskId",
     inputType,
     inputId,
     startX:clientX,
@@ -729,7 +732,7 @@ function moveTaskGesture(clientX,clientY){
     return;
   }
 
-  const siblings=[...dragState.parent.querySelectorAll(".task")].filter(row=>row!==dragState.row);
+  const siblings=[...dragState.parent.querySelectorAll(dragState.selector)].filter(row=>row!==dragState.row);
   const before=siblings.find(row=>{
     const rect=row.getBoundingClientRect();
     return clientY<rect.top+rect.height/2;
@@ -743,7 +746,10 @@ function moveTaskGesture(clientX,clientY){
 }
 
 async function saveDraggedOrder(rowElement,parentElement){
-  const orderedIds=[...parentElement.querySelectorAll(".task")].map(row=>row.dataset.taskId).filter(Boolean);
+  const state=dragState;
+  if(!state)return;
+  const {kind,selector,dataKey}=state;
+  const orderedIds=[...parentElement.querySelectorAll(selector)].map(row=>row.dataset[dataKey]).filter(Boolean);
   rowElement.classList.remove("dragging");
   unlockTaskDragScroll();
   dragState=null;
@@ -757,10 +763,10 @@ async function saveDraggedOrder(rowElement,parentElement){
   render();
   try{
     await batch.commit();
-    status("Task order saved");
+    status(kind==="heading"?"Heading order saved":"Task order saved");
   }catch(error){
-    console.error("Could not save task order:",error);
-    status("Could not save task order",true);
+    console.error(`Could not save ${kind} order:`,error);
+    status(`Could not save ${kind} order`,true);
   }finally{
     reorderBusy=false;
     render();
@@ -795,6 +801,22 @@ function onTaskTouchStart(event,task,rowElement){
 function onTaskMouseDown(event,task,rowElement){
   if(event.button!==0||event.target.closest("button"))return;
   if(startTaskGesture(task,rowElement,{inputType:"mouse",inputId:0,clientX:event.clientX,clientY:event.clientY})){
+    event.preventDefault();
+  }
+}
+
+function onHeadingTouchStart(event,heading,sectionElement){
+  if(event.target.closest(".section-title,.section-actions")||event.touches.length!==1)return;
+  const touch=event.changedTouches[0];
+  if(!touch)return;
+  if(startTaskGesture(heading,sectionElement,{inputType:"touch",inputId:touch.identifier,clientX:touch.clientX,clientY:touch.clientY,kind:"heading"})){
+    event.preventDefault();
+  }
+}
+
+function onHeadingMouseDown(event,heading,sectionElement){
+  if(event.button!==0||event.target.closest(".section-title,.section-actions"))return;
+  if(startTaskGesture(heading,sectionElement,{inputType:"mouse",inputId:0,clientX:event.clientX,clientY:event.clientY,kind:"heading"})){
     event.preventDefault();
   }
 }
@@ -897,8 +919,14 @@ function createTaskRow(task){
 function createSection(heading,sectionTasks,{general=false}={}){
   const section=document.createElement("section");
   section.className="section";
+  if(!general)section.dataset.headingId=heading.id;
   const head=document.createElement("div");
   head.className="section-head";
+  if(!general){
+    head.setAttribute("aria-label",`${heading.text}. Hold the empty heading bar to reorder.`);
+    head.addEventListener("touchstart",event=>onHeadingTouchStart(event,heading,section),{passive:false});
+    head.addEventListener("mousedown",event=>onHeadingMouseDown(event,heading,section));
+  }
   const title=document.createElement("h2");
   title.className="section-title";
   title.textContent=heading.text;
@@ -1029,7 +1057,7 @@ document.addEventListener("keydown",event=>{
   if(event.key==="Escape")closeKeyboard();
   else if(event.key==="Enter"){event.preventDefault();commit()}
   else if(event.key==="Backspace"){event.preventDefault();backspace()}
-  else if(event.key.length===1){event.preventDefault();insert(event.key)}
+  else if(event.key.length===1&&!event.ctrlKey&&!event.metaKey&&!event.altKey){event.preventDefault();insert(event.key,{preserveCase:true})}
 });
 
 const openHeading=()=>openKeyboard({type:"heading",title:"New heading",placeholder:"Type a heading…",maxLength:80,actionLabel:"Add"});
