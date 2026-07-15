@@ -67,7 +67,7 @@ body.keyboard-open{overflow:hidden}
 .keyboard-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.keyboard-head h2{margin:0;font-size:clamp(28px,5vw,42px);letter-spacing:-.035em}
 .close{display:grid;place-items:center;width:clamp(54px,9vw,68px);height:clamp(54px,9vw,68px);border-radius:18px;background:rgba(255,255,255,.06);color:var(--muted);font-size:clamp(28px,5vw,38px)}
 .draft{min-height:clamp(92px,15vw,132px);margin-bottom:18px;padding:20px 22px;border:1px solid var(--accent-line);border-radius:22px;background:#0a0d12;color:var(--text);font-size:clamp(25px,4.5vw,34px);font-weight:650;line-height:1.3;overflow-wrap:anywhere}
-.draft.draft-empty{color:#6e7684}
+.draft.draft-empty{color:#6e7684}.native-input{display:none;width:100%;min-height:clamp(150px,28vw,230px);margin-bottom:14px;padding:18px 20px;resize:none;border:1px solid var(--accent-line);border-radius:22px;outline:0;background:#0a0d12;color:var(--text);font:inherit;font-size:clamp(20px,4vw,30px);font-weight:650;line-height:1.3;caret-color:var(--accent);-webkit-appearance:none}.native-actions{display:none;grid-template-columns:1fr 1.35fr;gap:9px}.native-action{height:52px;border-radius:14px;background:rgba(255,255,255,.06);font-weight:800}.native-action.save{background:var(--accent);color:#fff}.keyboard-panel.native-mode .draft,.keyboard-panel.native-mode .keyboard,.keyboard-panel.native-mode .keyboard-hint{display:none}.keyboard-panel.native-mode .native-input{display:block}.keyboard-panel.native-mode .native-actions{display:grid}.keyboard-overlay.native-mode{align-items:flex-start;padding-top:max(12px,env(safe-area-inset-top))}.keyboard-panel.native-mode{max-height:calc(100dvh - max(24px,env(safe-area-inset-top)));overflow-y:auto}
 .caret{display:inline-block;width:3px;height:1em;margin-left:3px;vertical-align:-.12em;border-radius:2px;background:var(--accent);animation:blink 900ms steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 .keyboard{display:flex;flex-direction:column;gap:clamp(7px,1.4vw,11px);user-select:none;-webkit-user-select:none}.key-row{display:flex;justify-content:center;gap:clamp(5px,1.1vw,9px)}
@@ -119,6 +119,8 @@ body.keyboard-open{overflow:hidden}
   <div class="keyboard-panel">
     <div class="keyboard-head"><h2 id="keyboardTitle">New heading</h2><button class="close" id="keyboardClose" type="button" aria-label="Close keyboard">×</button></div>
     <div class="draft draft-empty" id="draftDisplay" role="textbox" aria-label="Typed text" aria-live="polite"></div>
+    <textarea class="native-input" id="nativeInput" rows="4" autocomplete="off" autocapitalize="sentences" spellcheck="true" aria-label="Type text"></textarea>
+    <div class="native-actions" id="nativeActions"><button class="native-action" id="nativeCancel" type="button">Cancel</button><button class="native-action save" id="nativeSave" type="button">Add</button></div>
     <div class="keyboard" id="touchKeyboard" aria-label="Touch keyboard"></div>
     <p class="keyboard-hint" id="keyboardHint">Touch the keys to type</p>
   </div>
@@ -155,9 +157,10 @@ const firebaseConfig={
 
 const db=initializeFirestore(initializeApp(firebaseConfig),{localCache:memoryLocalCache()});
 const $=id=>document.getElementById(id);
-const themeButton=$("themeButton"),sheetTabs=$("sheetTabs"),addSheetButton=$("addSheetButton"),deleteSheetButton=$("deleteSheetButton"),headingForm=$("headingForm"),headingInput=$("headingInput"),openHeadingKeyboard=$("openHeadingKeyboard"),keyboardOverlay=$("keyboardOverlay"),keyboardClose=$("keyboardClose"),touchKeyboard=$("touchKeyboard"),draftDisplay=$("draftDisplay"),keyboardTitle=$("keyboardTitle"),keyboardHint=$("keyboardHint"),sections=$("sections"),taskViewport=$("taskViewport"),emptyState=$("emptyState"),openCount=$("openCount"),progressLabel=$("progressLabel"),clearCompleted=$("clearCompleted"),syncStatus=$("syncStatus"),themeOverlay=$("themeOverlay"),themeClose=$("themeClose"),colorArea=$("colorArea"),colorCursor=$("colorCursor"),hueSlider=$("hueSlider"),colorPreview=$("colorPreview"),hexValue=$("hexValue"),recentColorsElement=$("recentColors"),themeCancel=$("themeCancel"),themeSave=$("themeSave");
+const themeButton=$("themeButton"),sheetTabs=$("sheetTabs"),addSheetButton=$("addSheetButton"),deleteSheetButton=$("deleteSheetButton"),headingForm=$("headingForm"),headingInput=$("headingInput"),openHeadingKeyboard=$("openHeadingKeyboard"),keyboardOverlay=$("keyboardOverlay"),keyboardClose=$("keyboardClose"),touchKeyboard=$("touchKeyboard"),draftDisplay=$("draftDisplay"),keyboardTitle=$("keyboardTitle"),keyboardHint=$("keyboardHint"),nativeInput=$("nativeInput"),nativeCancel=$("nativeCancel"),nativeSave=$("nativeSave"),sections=$("sections"),taskViewport=$("taskViewport"),emptyState=$("emptyState"),openCount=$("openCount"),progressLabel=$("progressLabel"),clearCompleted=$("clearCompleted"),syncStatus=$("syncStatus"),themeOverlay=$("themeOverlay"),themeClose=$("themeClose"),colorArea=$("colorArea"),colorCursor=$("colorCursor"),hueSlider=$("hueSlider"),colorPreview=$("colorPreview"),hexValue=$("hexValue"),recentColorsElement=$("recentColors"),themeCancel=$("themeCancel"),themeSave=$("themeSave");
 
-let items=[],loaded=false,draft="",shift=true,mode="letters",busy=false,unsubscribe=null,keyboardContext=null;
+let items=[],loaded=false,draft="",shift=true,mode="letters",busy=false,unsubscribe=null,keyboardContext=null,nativeInputMode=false;
+const isIOSDevice=()=>/iP(?:ad|hone|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 let currentSheetId=null,bootstrapping=false,reorderBusy=false,deleteSheetArmedUntil=0,dragState=null;
 let currentAccent="#CA3229",pendingAccent=currentAccent,recentColors=[],pickerHue=0,pickerSaturation=0,pickerValue=0;
 
@@ -382,19 +385,37 @@ function openKeyboard(context){
   draft=context.initialText||"";
   shift=context.shift!==false;
   mode=context.type==="hex"?"hex":"letters";
+  nativeInputMode=isIOSDevice()&&context.type!=="hex";
   busy=false;
   keyboardTitle.textContent=context.title;
   keyboardHint.textContent=`Touch the keys or use a physical keyboard · ${context.maxLength} characters maximum`;
+  nativeInput.value=draft;
+  nativeInput.maxLength=context.maxLength;
+  nativeInput.placeholder=context.placeholder||"Type here…";
+  nativeSave.textContent=context.actionLabel||"Add";
   renderDraft();
   renderKeyboard();
+  keyboardOverlay.classList.toggle("native-mode",nativeInputMode);
+  keyboardOverlay.querySelector(".keyboard-panel").classList.toggle("native-mode",nativeInputMode);
   keyboardOverlay.hidden=false;
   document.body.classList.add("keyboard-open");
+  if(nativeInputMode){
+    requestAnimationFrame(()=>{
+      nativeInput.focus({preventScroll:true});
+      nativeInput.setSelectionRange(nativeInput.value.length,nativeInput.value.length);
+    });
+  }
 }
 
 function closeKeyboard(){
+  nativeInput.blur();
   keyboardOverlay.hidden=true;
+  keyboardOverlay.classList.remove("native-mode");
+  keyboardOverlay.querySelector(".keyboard-panel").classList.remove("native-mode");
   document.body.classList.remove("keyboard-open");
   draft="";
+  nativeInput.value="";
+  nativeInputMode=false;
   busy=false;
   keyboardContext=null;
   touchKeyboard.replaceChildren();
@@ -1053,7 +1074,7 @@ touchKeyboard.addEventListener("click",event=>{
 });
 
 document.addEventListener("keydown",event=>{
-  if(keyboardOverlay.hidden)return;
+  if(keyboardOverlay.hidden||nativeInputMode)return;
   if(event.key==="Escape")closeKeyboard();
   else if(event.key==="Enter"){event.preventDefault();commit()}
   else if(event.key==="Backspace"){event.preventDefault();backspace()}
@@ -1070,6 +1091,9 @@ openHeadingKeyboard.addEventListener("click",openHeading);
 addSheetButton.addEventListener("click",openSheet);
 deleteSheetButton.addEventListener("click",deleteCurrentSheet);
 keyboardClose.addEventListener("click",closeKeyboard);
+nativeCancel.addEventListener("click",closeKeyboard);
+nativeSave.addEventListener("click",commit);
+nativeInput.addEventListener("input",()=>{draft=nativeInput.value});
 keyboardOverlay.addEventListener("click",event=>{if(event.target===keyboardOverlay)closeKeyboard()});
 clearCompleted.addEventListener("click",clearDone);
 
