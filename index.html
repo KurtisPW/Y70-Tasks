@@ -13,7 +13,7 @@ body{min-height:100dvh;overflow:hidden;background:radial-gradient(circle at 50% 
 button,input{font:inherit}button{border:0;color:inherit;cursor:pointer;touch-action:manipulation}
 .app{width:min(100%,760px);height:100dvh;margin:0 auto;padding:clamp(9px,1.4vh,18px) clamp(10px,2.2vw,22px) 9px;display:flex;flex-direction:column;gap:7px;overflow:hidden}
 .eyebrow{align-self:center;margin:0;padding:0;background:transparent;color:var(--accent);font-size:clamp(10px,1.7vw,13px);font-weight:850;letter-spacing:.13em;text-transform:uppercase;text-align:center;flex:0 0 auto}
-.sheetbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:4px;min-width:0}
+.sheetbar{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:4px;min-width:0;margin-left:5px;padding-left:12px}.sheetbar::before{content:"";position:absolute;left:2px;top:50%;width:1px;height:26px;transform:translateY(-50%);border-radius:999px;background:rgba(255,255,255,.16)}
 .sheet-tabs{display:flex;align-items:center;gap:5px;min-width:0;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
 .sheet-tabs::-webkit-scrollbar{display:none}
 .sheet-tab{flex:0 0 auto;max-width:150px;height:32px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.045);color:var(--muted);font-size:clamp(10px,1.8vw,13px);font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;user-select:none;-webkit-user-select:none}
@@ -44,7 +44,7 @@ h1{margin:0;font-size:clamp(28px,5.6vw,44px);line-height:.98;letter-spacing:-.05
 .section-add,.section-delete{display:grid;place-items:center;width:31px;height:31px;border-radius:9px;background:rgba(255,255,255,.055);font-size:20px;line-height:1}
 .section-add{background:var(--accent);color:#fff}.section-delete{color:#77808f}
 .tasks{display:flex;flex-direction:column;gap:4px;margin:0;padding:5px;list-style:none}
-.task{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;min-height:clamp(45px,7vw,58px);padding:6px 7px 6px 9px;border:1px solid rgba(255,255,255,.065);border-radius:11px;background:var(--panel);transition:opacity 160ms ease,transform 160ms ease,border-color 160ms ease,box-shadow 160ms ease;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.task{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;min-height:clamp(45px,7vw,58px);padding:6px 7px 6px 9px;border:1px solid rgba(255,255,255,.065);border-radius:11px;background:var(--panel);transition:opacity 160ms ease,transform 160ms ease,border-color 160ms ease,box-shadow 160ms ease;touch-action:none;user-select:none;-webkit-user-select:none}
 .task:active{transform:scale(.992)}.task.done{opacity:.58;background:rgba(19,23,32,.66)}
 .task.dragging{opacity:.92;transform:scale(1.015);border-color:var(--accent);box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px var(--accent-line);z-index:5;touch-action:none}
 body.task-dragging{touch-action:none;overscroll-behavior:none}body.task-dragging .task:not(.dragging){transition:transform 90ms ease}
@@ -88,7 +88,7 @@ body.keyboard-open{overflow:hidden}
 .recent-row{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px;margin-top:14px;color:var(--muted);font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:.08em}.recent-colors{display:flex;gap:8px;min-height:38px}.recent-color{width:38px;height:38px;border:2px solid rgba(255,255,255,.34);border-radius:12px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.22)}.recent-empty{align-self:center;color:#646c79;font-size:11px;text-transform:none;letter-spacing:0}
 .theme-actions{display:grid;grid-template-columns:1fr 1.35fr;gap:9px;margin-top:16px}.theme-action{height:48px;border-radius:14px;background:rgba(255,255,255,.06);font-weight:800}.theme-action.save{background:var(--accent);color:#fff}
 
-@media(max-width:430px){.app{padding-inline:8px}.header{gap:5px}h1{font-size:28px}.sheet-tab{max-width:112px;padding-inline:8px}.keyboard-overlay{padding:8px}.keyboard-panel{padding:16px 12px 18px;border-radius:24px}.key{height:58px}.section-head{padding-left:9px}.tasks{padding:4px}.task{padding-left:7px}}
+@media(max-width:430px){.app{padding-inline:8px}.header{gap:5px}h1{font-size:28px}.sheetbar{margin-left:2px;padding-left:9px}.sheetbar::before{left:1px;height:24px}.sheet-tab{max-width:112px;padding-inline:8px}.keyboard-overlay{padding:8px}.keyboard-panel{padding:16px 12px 18px;border-radius:24px}.key{height:58px}.section-head{padding-left:9px}.tasks{padding:4px}.task{padding-left:7px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -359,7 +359,7 @@ function renderKeyboard(){
     row([shiftKey,...[..."zxcvbnm"].map(value=>key(shift?value.toUpperCase():value,{value})),key("⌫",{action:"backspace",className:"key-wide",aria:"Backspace"})]);
     row([key("#+=",{action:"symbols",className:"key-wide",aria:"Show symbols"}),key(".",{value:"."}),key(",",{value:","}),key("Space",{value:" ",className:"key-space"}),key("-",{value:"-"}),key(keyboardContext?.actionLabel||"Add",{action:"commit",className:"key-action"})]);
   }else{
-    for(const symbols of[["!","@","#","$","%","^","&","*","(",")"],["-","_","+","=","/","\\",":",";","'",'"'],["[","]","{","}","<",">",",",".","?","`"]]){
+    for(const symbols of [["!","@","#","$","%","^","&","*","(",")"],["-","_","+","=","/","\\",":",";","'",'"'],["[","]","{","}","<",">",",",".","?","`"]]){
       row(symbols.map(value=>key(value,{value})));
     }
     row([key("ABC",{action:"letters",className:"key-wide",aria:"Show letters"}),key("Space",{value:" ",className:"key-space"}),key("⌫",{action:"backspace",className:"key-wide",aria:"Backspace"}),key(keyboardContext?.actionLabel||"Add",{action:"commit",className:"key-action"})]);
@@ -455,7 +455,7 @@ async function bootstrapFirstSheet(rawItems){
         order:index*1000
       }));
     }
-    batch.set(settingsDocument(),{kind:"settings",activeSheetId:"sheet-main",createdAt:0,updatedAt:now},{merge:true});
+    batch.set(settingsDocument(),{kind:"settings",activeSheetId:"sheet-main",createdAt:0,updatedAt:now});
     await batch.commit();
     return true;
   }catch(error){
@@ -590,11 +590,10 @@ async function addTask(text,headingId=null){
   }
 }
 
-
 async function renameItem(id,text,label){
   const clean=text.trim();
   if(!clean)return false;
-  status(`Saving ${label} name…`);
+  status(`Saving ${label}…`);
   try{
     await updateDoc(itemDocument(id),{text:clean});
     return true;
@@ -614,8 +613,9 @@ async function commit(){
     else if(keyboardContext.type==="heading")saved=await addHeading(draft);
     else if(keyboardContext.type==="renameSheet")saved=await renameItem(keyboardContext.itemId,draft,"task sheet");
     else if(keyboardContext.type==="renameHeading")saved=await renameItem(keyboardContext.itemId,draft,"heading");
-    else if(keyboardContext.type==="hex")saved=applyHexDraft(draft);
-    else saved=await addTask(draft,keyboardContext.headingId);
+    else if(keyboardContext.type==="hex"){
+      saved=applyHexDraft(draft);
+    }else saved=await addTask(draft,keyboardContext.headingId);
     if(saved)closeKeyboard();
   }finally{
     busy=false;
@@ -672,32 +672,40 @@ function unlockTaskDragScroll(){
   taskViewport.style.overflowY=dragState.previousOverflowY||"";
   document.body.classList.remove("task-dragging");
 }
+
+function releaseTaskPointer(state){
+  if(!state)return;
+  try{
+    if(state.row.hasPointerCapture(state.pointerId))state.row.releasePointerCapture(state.pointerId);
+  }catch{}
+}
+
 function cancelPendingDrag(){
   if(!dragState)return;
-  clearTimeout(dragState.timer);
-  if(dragState.dragging){
-    dragState.row.classList.remove("dragging");
+  const state=dragState;
+  clearTimeout(state.timer);
+  if(state.dragging){
+    state.row.classList.remove("dragging");
     unlockTaskDragScroll();
-    try{
-      if(dragState.row.hasPointerCapture(dragState.pointerId))dragState.row.releasePointerCapture(dragState.pointerId);
-    }catch{}
   }
+  releaseTaskPointer(state);
   dragState=null;
 }
+
 function beginTaskDrag(){
-  if(!dragState)return;
+  if(!dragState||dragState.scrolling)return;
   dragState.dragging=true;
   dragState.previousOverflowY=taskViewport.style.overflowY;
   taskViewport.style.overflowY="hidden";
   dragState.row.classList.add("dragging");
   document.body.classList.add("task-dragging");
-  try{dragState.row.setPointerCapture(dragState.pointerId)}catch{}
   status("Drag to reorder · release to save");
 }
 
 function onTaskPointerDown(event,task,rowElement){
   if(reorderBusy||dragState||event.target.closest("button"))return;
   if(event.pointerType==="mouse"&&event.button!==0)return;
+  event.preventDefault();
   dragState={
     task,
     row:rowElement,
@@ -705,24 +713,42 @@ function onTaskPointerDown(event,task,rowElement){
     pointerId:event.pointerId,
     startX:event.clientX,
     startY:event.clientY,
+    startScrollTop:taskViewport.scrollTop,
+    scrolling:false,
     dragging:false,
+    previousOverflowY:"",
     timer:setTimeout(beginTaskDrag,430)
   };
+  try{rowElement.setPointerCapture(event.pointerId)}catch{}
 }
 
 function onTaskPointerMove(event){
   if(!dragState||dragState.pointerId!==event.pointerId||dragState.row!==event.currentTarget)return;
-  if(!dragState.dragging){
-    if(Math.hypot(event.clientX-dragState.startX,event.clientY-dragState.startY)>10)cancelPendingDrag();
-    return;
-  }
   event.preventDefault();
   event.stopPropagation();
-  const target=document.elementFromPoint(event.clientX,event.clientY)?.closest(".task");
-  if(target&&target!==dragState.row&&target.parentElement===dragState.parent){
-    const rect=target.getBoundingClientRect();
-    dragState.parent.insertBefore(dragState.row,event.clientY<rect.top+rect.height/2?target:target.nextSibling);
+
+  const dx=event.clientX-dragState.startX;
+  const dy=event.clientY-dragState.startY;
+
+  if(!dragState.dragging){
+    if(!dragState.scrolling&&Math.hypot(dx,dy)>10){
+      clearTimeout(dragState.timer);
+      dragState.scrolling=true;
+    }
+    if(dragState.scrolling){
+      taskViewport.scrollTop=dragState.startScrollTop-dy;
+    }
+    return;
   }
+
+  const siblings=[...dragState.parent.querySelectorAll(".task")].filter(row=>row!==dragState.row);
+  const before=siblings.find(row=>{
+    const rect=row.getBoundingClientRect();
+    return event.clientY<rect.top+rect.height/2;
+  });
+  if(before)dragState.parent.insertBefore(dragState.row,before);
+  else dragState.parent.append(dragState.row);
+
   const viewportRect=taskViewport.getBoundingClientRect();
   if(event.clientY<viewportRect.top+38)taskViewport.scrollTop-=12;
   else if(event.clientY>viewportRect.bottom-38)taskViewport.scrollTop+=12;
@@ -732,7 +758,8 @@ async function saveDraggedOrder(rowElement,parentElement,pointerId){
   const orderedIds=[...parentElement.querySelectorAll(".task")].map(row=>row.dataset.taskId).filter(Boolean);
   rowElement.classList.remove("dragging");
   unlockTaskDragScroll();
-  try{if(rowElement.hasPointerCapture(pointerId))rowElement.releasePointerCapture(pointerId)}catch{}
+  const state=dragState;
+  releaseTaskPointer(state||{row:rowElement,pointerId});
   dragState=null;
   reorderBusy=true;
   const batch=writeBatch(db);
@@ -758,6 +785,8 @@ function onTaskPointerEnd(event){
   if(!dragState||dragState.pointerId!==event.pointerId||dragState.row!==event.currentTarget)return;
   clearTimeout(dragState.timer);
   if(!dragState.dragging){
+    const state=dragState;
+    releaseTaskPointer(state);
     dragState=null;
     return;
   }
@@ -983,10 +1012,6 @@ keyboardClose.addEventListener("click",closeKeyboard);
 keyboardOverlay.addEventListener("click",event=>{if(event.target===keyboardOverlay)closeKeyboard()});
 clearCompleted.addEventListener("click",clearDone);
 
-
-document.addEventListener("touchmove",event=>{
-  if(dragState?.dragging)event.preventDefault();
-},{passive:false,capture:true});
 
 themeButton.addEventListener("click",openThemePicker);
 themeClose.addEventListener("click",()=>closeThemePicker());
