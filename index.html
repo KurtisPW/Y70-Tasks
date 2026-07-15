@@ -579,7 +579,7 @@
       <div class="auth-mark" aria-hidden="true">✓</div>
       <p class="auth-eyebrow">Y70 Dashboard</p>
       <h1 class="auth-title">Cloud Tasks</h1>
-      <p class="auth-copy">Sign in with the Firebase user you created. Your tasks will reload from the cloud after Nexus restarts.</p>
+      <p class="auth-copy">Sign in with the Firebase user you created. Your tasks live in Firestore and reload from the cloud. Nexus uses a restricted iframe, so you may need to sign in again after each restart.</p>
 
       <form class="auth-form" id="loginForm" autocomplete="off">
         <div class="auth-field">
@@ -591,7 +591,7 @@
           <input id="passwordInput" type="password" inputmode="none" readonly aria-label="Password. Tap to use touch keyboard." />
         </div>
         <button class="auth-button" id="loginButton" type="submit">Sign in</button>
-        <p class="auth-message" id="authMessage">Checking saved sign-in…</p>
+        <p class="auth-message" id="authMessage">Sign in to load your cloud tasks.</p>
       </form>
     </div>
   </section>
@@ -664,10 +664,9 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
     import {
-      browserLocalPersistence,
-      getAuth,
+      inMemoryPersistence,
+      initializeAuth,
       onAuthStateChanged,
-      setPersistence,
       signInWithEmailAndPassword,
       signOut
     } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
@@ -694,9 +693,10 @@
     };
 
     const firebaseApp = initializeApp(firebaseConfig);
-    const auth = getAuth(firebaseApp);
+    const auth = initializeAuth(firebaseApp, {
+      persistence: inMemoryPersistence
+    });
     const db = getFirestore(firebaseApp);
-    const LEGACY_STORAGE_KEY = "hyte-y70-tasks-v1";
 
     const authScreen = document.getElementById("authScreen");
     const app = document.getElementById("app");
@@ -1001,35 +1001,6 @@
       }
     }
 
-    async function migrateLegacyTasks(user) {
-      let legacyTasks = [];
-      try {
-        const parsed = JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY) || "[]");
-        legacyTasks = Array.isArray(parsed) ? parsed.filter(isValidTask) : [];
-      } catch (error) {
-        console.warn("Could not read old local tasks:", error);
-      }
-
-      if (!legacyTasks.length) return;
-      setSyncStatus("Moving local tasks to Firebase…");
-
-      try {
-        const batch = writeBatch(db);
-        for (const task of legacyTasks) {
-          batch.set(taskDocument(task.id, user), {
-            text: task.text.slice(0, 180),
-            done: task.done,
-            createdAt: Number.isFinite(task.createdAt) ? task.createdAt : Date.now()
-          });
-        }
-        await batch.commit();
-        localStorage.removeItem(LEGACY_STORAGE_KEY);
-      } catch (error) {
-        console.error("Could not migrate local tasks:", error);
-        setSyncStatus("Cloud migration failed — local copy kept", true);
-      }
-    }
-
     function subscribeToTasks(user) {
       if (unsubscribeTasks) unsubscribeTasks();
       setSyncStatus("Loading cloud tasks…");
@@ -1110,7 +1081,6 @@
       loginButton.disabled = true;
       setAuthMessage("Signing in…");
       try {
-        await setPersistence(auth, browserLocalPersistence);
         await signInWithEmailAndPassword(auth, email, password);
         passwordInput.value = "";
       } catch (error) {
@@ -1197,10 +1167,6 @@
 
     render();
 
-    setPersistence(auth, browserLocalPersistence).catch((error) => {
-      console.warn("Firebase auth persistence is unavailable in this browser:", error);
-    });
-
     onAuthStateChanged(auth, async (user) => {
       if (unsubscribeTasks) {
         unsubscribeTasks();
@@ -1222,7 +1188,6 @@
       app.hidden = false;
       emailInput.value = user.email || emailInput.value;
       passwordInput.value = "";
-      await migrateLegacyTasks(user);
       subscribeToTasks(user);
     });
   </script>
